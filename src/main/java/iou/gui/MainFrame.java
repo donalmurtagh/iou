@@ -25,10 +25,6 @@ public class MainFrame extends JFrame {
 
     private static final long serialVersionUID = -3027922271769048472L;
 
-    private JPanel centerPanel;
-
-    private JPanel southPanel;
-
     private JButton editPmtButton = new JButton();
 
     private JButton archiveButton;
@@ -41,39 +37,19 @@ public class MainFrame extends JFrame {
 
     private JButton deletePmtButton = new JButton();
 
-    private JLabel summaryLabel;
-
     private JTable expensesTable = new TransactionTable();
 
     private JTable paymentsTable = new TransactionTable();
 
-    private JScrollPane pmtScrollPane;
-
-    private JScrollPane expScrollPane;
-
-    private JLabel expensesLabel;
-
-    private JLabel paymentsLabel;
-
     private JButton editExpButton = new JButton();
 
     private JButton addPmtButton = new JButton();
-
-    private JSplitPane splitter;
-
-    private JPanel eastPanel;
-
-    private JPanel westPanel;
-
-    private JPanel northPanel;
 
     private TransactionTableModel expensesTableModel;
 
     private IController controller = Factory.getController();
 
     private TransactionTableModel paymentsTableModel;
-
-    private static final Font HEADING_FONT = new Font("Tahoma", Font.BOLD, 16);
 
     /**
      * If positive, Maude owes Donal, and vice versa
@@ -371,15 +347,15 @@ public class MainFrame extends JFrame {
         setSize(1050, 420);
         GuiUtils.loadApplicationImage(this);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        centerPanel = new JPanel();
+        JPanel centerPanel = new JPanel();
         getContentPane().add(centerPanel, BorderLayout.CENTER);
         centerPanel.setPreferredSize(new java.awt.Dimension(500, 300));
-        splitter = new JSplitPane();
+        JSplitPane splitter = new JSplitPane();
         centerPanel.add(splitter);
-        expScrollPane = new JScrollPane();
+        JScrollPane expScrollPane = new JScrollPane();
         splitter.add(expScrollPane, JSplitPane.RIGHT);
         expScrollPane.setPreferredSize(new java.awt.Dimension(409, 275));
-        pmtScrollPane = new JScrollPane();
+        JScrollPane pmtScrollPane = new JScrollPane();
         splitter.add(pmtScrollPane, JSplitPane.LEFT);
         pmtScrollPane.setPreferredSize(new java.awt.Dimension(409, 275));
 
@@ -392,7 +368,7 @@ public class MainFrame extends JFrame {
 
         pmtScrollPane.setViewportView(paymentsTable);
 
-        westPanel = new JPanel();
+        JPanel westPanel = new JPanel();
         BoxLayout westPanelLayout = new BoxLayout(westPanel, BoxLayout.Y_AXIS);
         westPanel.setLayout(westPanelLayout);
         westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
@@ -424,7 +400,7 @@ public class MainFrame extends JFrame {
             }
         });
 
-        eastPanel = new JPanel();
+        JPanel eastPanel = new JPanel();
         BoxLayout eastPanelLayout = new BoxLayout(eastPanel, BoxLayout.Y_AXIS);
         eastPanel.setLayout(eastPanelLayout);
         eastPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
@@ -456,7 +432,7 @@ public class MainFrame extends JFrame {
             }
         });
 
-        southPanel = new JPanel();
+        JPanel southPanel = new JPanel();
         getContentPane().add(southPanel, BorderLayout.SOUTH);
         southPanel.setBorder(BorderFactory.createTitledBorder(""));
 
@@ -472,7 +448,7 @@ public class MainFrame extends JFrame {
         archiveButton.setToolTipText("Archive the payments and expenses");
 
 
-        summaryLabel = new JLabel();
+        JLabel summaryLabel = new JLabel();
         southPanel.add(summaryLabel);
         summaryLabel.setName("summaryLabel");
         summaryLabel.setText("Summary:");
@@ -481,28 +457,30 @@ public class MainFrame extends JFrame {
         balanceLabel.setName("balanceLabel");
         balanceLabel.setPreferredSize(new java.awt.Dimension(170, 14));
 
-        northPanel = new JPanel();
+        JPanel northPanel = new JPanel();
         BorderLayout northPanelLayout = new BorderLayout();
         northPanel.setLayout(northPanelLayout);
         northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         getContentPane().add(northPanel, BorderLayout.NORTH);
 
-        paymentsLabel = new JLabel();
+        JLabel paymentsLabel = new JLabel();
         northPanel.add(paymentsLabel, BorderLayout.WEST);
         paymentsLabel.setName("paymentsLabel");
 
-        expensesLabel = new JLabel();
+        JLabel expensesLabel = new JLabel();
         northPanel.add(expensesLabel, BorderLayout.EAST);
         expensesLabel.setName("expensesLabel");
 
         // Set some textual properties and fonts on a bunch of components
         setTitle("IOU");
 
-        paymentsLabel.setFont(HEADING_FONT);
+        Font headingFont = new Font("Tahoma", Font.BOLD, 16);
+
+        paymentsLabel.setFont(headingFont);
         paymentsLabel.setText("Payments");
 
-        expensesLabel.setFont(HEADING_FONT);
+        expensesLabel.setFont(headingFont);
         expensesLabel.setText("Expenses");
 
         addExpButton.setText("Add");
