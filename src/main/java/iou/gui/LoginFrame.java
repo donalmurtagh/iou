@@ -30,7 +30,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
     private JPasswordField passwordField;
 
-    private JRadioButton maudeButton;
+    private JRadioButton annButton;
 
     private void doLogin() {
 
@@ -38,11 +38,11 @@ public class LoginFrame extends javax.swing.JFrame {
         Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR);
         setCursor(hourglassCursor);
 
-        String username = User.DONAL.toString();
+        String username = User.BOB.getUsername();
         String password = new String(passwordField.getPassword());
 
-        if (maudeButton.isSelected()) {
-            username = User.MAUDE.toString();
+        if (annButton.isSelected()) {
+            username = User.ANN.getUsername();
         }
 
         IController controller = Factory.getController();
@@ -121,18 +121,18 @@ public class LoginFrame extends javax.swing.JFrame {
             getContentPane().add(jPanel1, BorderLayout.NORTH);
             jPanel1.setPreferredSize(new java.awt.Dimension(392, 37));
 
-            maudeButton = new JRadioButton();
-            jPanel1.add(maudeButton);
-            maudeButton.setName("maudeButton");
+            annButton = new JRadioButton();
+            jPanel1.add(annButton);
+            annButton.setText(User.ANN.getName());
 
-            JRadioButton donalButton = new JRadioButton();
-            jPanel1.add(donalButton);
-            donalButton.setName("donalButton");
-            donalButton.setSelected(true);
+            JRadioButton bobButton = new JRadioButton();
+            jPanel1.add(bobButton);
+            bobButton.setText(User.BOB.getName());
+            bobButton.setSelected(true);
 
             ButtonGroup group = new ButtonGroup();
-            group.add(maudeButton);
-            group.add(donalButton);
+            group.add(annButton);
+            group.add(bobButton);
 
             JPanel jPanel2 = new JPanel();
             getContentPane().add(jPanel2, BorderLayout.CENTER);
