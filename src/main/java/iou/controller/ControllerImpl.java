@@ -12,10 +12,6 @@ import java.util.List;
 
 public class ControllerImpl implements IController {
 
-    private ApplicationContext springContext;
-
-    private static final String SPRING_CONFIG = "iou/controller/applicationContext.xml";
-
     private static final Logger LOGGER = Logger.getLogger(ControllerImpl.class);
 
     private ITransactionDao dao;
@@ -23,7 +19,7 @@ public class ControllerImpl implements IController {
     public boolean login(String username, String password) {
 
         // Create the application context,
-        springContext = new ClassPathXmlApplicationContext(SPRING_CONFIG);
+        ApplicationContext springContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
         dao = (ITransactionDao) springContext.getBean("txnDao");
 
         // Set the username and password, then try and login
