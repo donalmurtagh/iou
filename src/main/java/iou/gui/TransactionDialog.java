@@ -183,7 +183,7 @@ public class TransactionDialog extends javax.swing.JDialog {
 
             okButton = new JButton();
             btnPanel.add(okButton);
-            okButton.setName("okButton");
+            okButton.setText("OK");
             okButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
 
@@ -198,7 +198,7 @@ public class TransactionDialog extends javax.swing.JDialog {
             });
             cancelButton = new JButton();
             btnPanel.add(cancelButton);
-            cancelButton.setName("cancelButton");
+            cancelButton.setText("Cancel");
             cancelButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     close(false);
@@ -217,7 +217,7 @@ public class TransactionDialog extends javax.swing.JDialog {
 
             dateLabel = new JLabel();
             jPanel2.add(dateLabel, new CellConstraints("2, 2, 1, 1, default, default"));
-            dateLabel.setName("dateLabel");
+            dateLabel.setText("Date:");
 
 
             jPanel2.add(dateField, new CellConstraints("4, 2, 1, 1, default, default"));
@@ -227,7 +227,7 @@ public class TransactionDialog extends javax.swing.JDialog {
 
             descLabel = new JLabel();
             jPanel2.add(descLabel, new CellConstraints("2, 4, 1, 1, default, default"));
-            descLabel.setName("descLabel");
+            descLabel.setText("Description:");
 
             descField = new JTextField();
             jPanel2.add(descField, new CellConstraints("4, 4, 1, 1, default, default"));
