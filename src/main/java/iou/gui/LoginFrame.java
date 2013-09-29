@@ -28,23 +28,9 @@ public class LoginFrame extends javax.swing.JFrame {
 
     private static final Logger LOGGER = Logger.getLogger(LoginFrame.class);
 
-    private JPanel jPanel1;
-
-    private JButton cancelButton;
-
-    private JButton loginButton;
-
     private JPasswordField passwordField;
 
-    private JLabel passwordLabel;
-
-    private JRadioButton donalButton;
-
     private JRadioButton maudeButton;
-
-    private JPanel jPanel3;
-
-    private JPanel jPanel2;
 
     private void doLogin() {
 
@@ -104,11 +90,11 @@ public class LoginFrame extends javax.swing.JFrame {
             GuiUtils.loadApplicationImage(this);
             setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-            jPanel3 = new JPanel();
+            JPanel jPanel3 = new JPanel();
             getContentPane().add(jPanel3, BorderLayout.SOUTH);
             jPanel3.setPreferredSize(new java.awt.Dimension(392, 44));
 
-            loginButton = new JButton();
+            JButton loginButton = new JButton();
             loginButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     doLogin();
@@ -121,7 +107,7 @@ public class LoginFrame extends javax.swing.JFrame {
             // The login button handles the enter key press
             getRootPane().setDefaultButton(loginButton);
 
-            cancelButton = new JButton();
+            JButton cancelButton = new JButton();
             jPanel3.add(cancelButton);
             cancelButton.setText("Cancel");
 
@@ -131,7 +117,7 @@ public class LoginFrame extends javax.swing.JFrame {
                 }
             });
 
-            jPanel1 = new JPanel();
+            JPanel jPanel1 = new JPanel();
             getContentPane().add(jPanel1, BorderLayout.NORTH);
             jPanel1.setPreferredSize(new java.awt.Dimension(392, 37));
 
@@ -139,7 +125,7 @@ public class LoginFrame extends javax.swing.JFrame {
             jPanel1.add(maudeButton);
             maudeButton.setName("maudeButton");
 
-            donalButton = new JRadioButton();
+            JRadioButton donalButton = new JRadioButton();
             jPanel1.add(donalButton);
             donalButton.setName("donalButton");
             donalButton.setSelected(true);
@@ -148,11 +134,11 @@ public class LoginFrame extends javax.swing.JFrame {
             group.add(maudeButton);
             group.add(donalButton);
 
-            jPanel2 = new JPanel();
+            JPanel jPanel2 = new JPanel();
             getContentPane().add(jPanel2, BorderLayout.CENTER);
             jPanel2.setPreferredSize(new java.awt.Dimension(392, 65));
 
-            passwordLabel = new JLabel();
+            JLabel passwordLabel = new JLabel();
             jPanel2.add(passwordLabel);
             passwordLabel.setText("Enter Password:");
 
