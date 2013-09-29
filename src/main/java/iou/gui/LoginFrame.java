@@ -36,7 +36,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
     private JPasswordField passwordField;
 
-    private JLabel jLabel1;
+    private JLabel passwordLabel;
 
     private JRadioButton donalButton;
 
@@ -116,14 +116,14 @@ public class LoginFrame extends javax.swing.JFrame {
             });
 
             jPanel3.add(loginButton);
-            loginButton.setName("loginButton");
+            loginButton.setText("Login");
 
             // The login button handles the enter key press
             getRootPane().setDefaultButton(loginButton);
 
             cancelButton = new JButton();
             jPanel3.add(cancelButton);
-            cancelButton.setName("cancelButton");
+            cancelButton.setText("Cancel");
 
             cancelButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -152,9 +152,9 @@ public class LoginFrame extends javax.swing.JFrame {
             getContentPane().add(jPanel2, BorderLayout.CENTER);
             jPanel2.setPreferredSize(new java.awt.Dimension(392, 65));
 
-            jLabel1 = new JLabel();
-            jPanel2.add(jLabel1);
-            jLabel1.setName("jLabel1");
+            passwordLabel = new JLabel();
+            jPanel2.add(passwordLabel);
+            passwordLabel.setText("Enter Password:");
 
             passwordField = new JPasswordField();
             jPanel2.add(passwordField);
@@ -163,8 +163,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
             pack();
             this.setSize(400, 153);
-            Application.getInstance().getContext().getResourceMap(getClass())
-                    .injectComponents(getContentPane());
+            Application.getInstance().getContext().getResourceMap(getClass()).injectComponents(getContentPane());
         } catch (Exception e) {
             LOGGER.error("Error initialising login window", e);
         }
