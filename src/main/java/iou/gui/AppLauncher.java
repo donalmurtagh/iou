@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 public class AppLauncher {
 
@@ -26,9 +27,9 @@ public class AppLauncher {
         LOGGER.debug("Launching login window");
 
         // Load the application's icon
-        File imageFile = new File(".", "bin/iou/gui/resources/dollar.gif");
-        LOGGER.debug("Loading application icon from: " + imageFile.getAbsolutePath());
-        Image appImage = Toolkit.getDefaultToolkit().getImage(imageFile.toURI().toURL());
+        URL imageFile = AppLauncher.class.getResource("/gui/dollar.gif");
+        LOGGER.debug("Loading application icon from: " + imageFile);
+        Image appImage = Toolkit.getDefaultToolkit().getImage(imageFile);
         GuiUtils.setApplicationImage(appImage);
 
         // Create an instance of the login window and pass along any args
