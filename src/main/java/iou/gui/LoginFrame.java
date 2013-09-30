@@ -78,6 +78,8 @@ public class LoginFrame extends javax.swing.JFrame {
      */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
             public void run() {
                 LoginFrame inst = new LoginFrame();
                 inst.setLocationRelativeTo(null);
