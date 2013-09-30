@@ -34,7 +34,7 @@
         </property>
     </bean>
 
-    <bean id="txnDao" class="iou.controller.JdbcTransactionDaoImpl">
+    <bean id="transactionDao" class="iou.controller.JdbcTransactionDaoImpl">
         <property name="dataSource">
             <ref local="dataSource"/>
         </property>

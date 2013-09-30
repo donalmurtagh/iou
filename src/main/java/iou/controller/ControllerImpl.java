@@ -14,22 +14,22 @@ public class ControllerImpl implements Controller {
 
     private static final Logger LOGGER = Logger.getLogger(ControllerImpl.class);
 
-    private final TransactionDao dao;
+    private final TransactionDao transactionDao;
 
     public ControllerImpl() {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
-        dao = (TransactionDao) applicationContext.getBean("txnDao");
+        transactionDao = (TransactionDao) applicationContext.getBean("transactionDao");
     }
 
     public boolean login(String username, String password) {
 
         // Set the username and password, then try and login
-        BasicDataSource dataSource = (BasicDataSource) dao.getDataSource();
+        BasicDataSource dataSource = (BasicDataSource) transactionDao.getDataSource();
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 
         try {
-            dao.testConnection();
+            transactionDao.testConnection();
             LOGGER.debug("Connection successfully tested");
             return true;
 
@@ -40,25 +40,25 @@ public class ControllerImpl implements Controller {
     }
 
     public List<Transaction> getTransactions(TransactionType type) {
-        return dao.getTransactions(type);
+        return transactionDao.getTransactions(type);
     }
 
     public Transaction insertTransaction(Transaction tran) {
-        return dao.insertTransaction(tran);
+        return transactionDao.insertTransaction(tran);
     }
 
     public boolean updateTransaction(Transaction tran) {
-        return dao.updateTransaction(tran);
+        return transactionDao.updateTransaction(tran);
     }
 
     public boolean deleteTransaction(Long id) {
-        return dao.deleteTransaction(id);
+        return transactionDao.deleteTransaction(id);
     }
 
     public void archiveTransactions(Float netBobBalance) {
 
         // Archive all current transactions
-        dao.archiveTransactions();
+        transactionDao.archiveTransactions();
 
         if (netBobBalance != 0) {
 
