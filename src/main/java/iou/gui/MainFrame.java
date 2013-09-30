@@ -2,10 +2,7 @@ package iou.gui;
 
 import iou.controller.Factory;
 import iou.controller.IController;
-import iou.enums.ExpenseField;
-import iou.enums.PaymentField;
-import iou.enums.TranDialogMode;
-import iou.enums.TransactionType;
+import iou.enums.*;
 import iou.model.*;
 import iou.util.GuiUtils;
 import org.apache.log4j.Logger;
@@ -14,7 +11,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * The main application window
@@ -51,23 +51,40 @@ public class MainFrame extends JFrame {
 
     private TransactionTableModel paymentsTableModel;
 
+    private NumberFormat currencyFormatter;
+
     /**
-     * If positive, Maude owes Donal, and vice versa
+     * If positive, Ann owes Bob, and vice versa
      */
-    private float netDonalBalance;
+    private float netBobBalance;
 
     private enum TableUpdateType {
-        PAYMENT, EXPENSE, BOTH;
+        PAYMENT, EXPENSE, BOTH
     }
 
     private static final Logger LOGGER = Logger.getLogger(MainFrame.class);
 
     public MainFrame() {
-        startup();
-        refreshGUI();
+        GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
+        initUI();
+
+        try {
+            Properties messages = new Properties();
+            messages.load(getClass().getResourceAsStream("/gui/messages.properties"));
+            String currencySymbol = messages.getProperty("currency.symbol");
+            currencyFormatter = new DecimalFormat(currencySymbol + "#.##");
+
+            loadData();
+
+        } catch (Exception ex) {
+            handleFatalException(ex);
+
+        } finally {
+            GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
+        }
     }
 
-    private void refreshGUI() {
+    private void loadData() {
 
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
 
@@ -110,7 +127,6 @@ public class MainFrame extends JFrame {
         if (paymentDialog.isValidTransaction()) {
             persistUpdatedTransaction(selectedRowIndex, paymentDialog.getTransaction());
         }
-
     }
 
     private void showAddPaymentDialog() {
@@ -121,7 +137,6 @@ public class MainFrame extends JFrame {
         if (paymentDialog.isValidTransaction()) {
             persistNewTransaction(paymentDialog.getTransaction());
         }
-
     }
 
     /**
@@ -144,8 +159,7 @@ public class MainFrame extends JFrame {
      * @param editButton
      * @param deleteButton
      */
-    private static void updateTableAndButtonsUI(JTable table, JButton editButton,
-                                                JButton deleteButton) {
+    private static void updateTableAndButtonsUI(JTable table, JButton editButton, JButton deleteButton) {
 
         table.updateUI();
         boolean rowsExist = (table.getModel().getRowCount() > 0);
@@ -183,43 +197,54 @@ public class MainFrame extends JFrame {
         // The balance needs to be recalculated if either an expense or payment has changed
         updateNetBalance();
 
-        if (netDonalBalance > 0) {
-            balanceLabel.setText("Maude owes Donal $" + GuiUtils.formatDecimal(netDonalBalance));
+        if (netBobBalance > 0) {
+            String annOwesBob = String.format("%s owes %s %s",
+                    User.ANN.getName(),
+                    User.BOB.getName(),
+                    formatDecimal(netBobBalance));
+            balanceLabel.setText(annOwesBob);
 
-        } else if (netDonalBalance < 0) {
+        } else if (netBobBalance < 0) {
 
-            // A negative balance indicates Donal owes Maude, but it will be shown
-            // as a positive amount
-            balanceLabel.setText("Donal owes Maude $" + GuiUtils.formatDecimal(-netDonalBalance));
+            // A negative balance indicates Bob owes Ann, but it will be shown as a positive amount
+            String bobOwesAnn = String.format("%s owes %s %s",
+                    User.BOB.getName(),
+                    User.ANN.getName(),
+                    formatDecimal(-netBobBalance));
+
+            balanceLabel.setText(bobOwesAnn);
 
         } else {
             balanceLabel.setText("Nothing owed");
         }
     }
 
+    private String formatDecimal(Float decimal) {
+        return currencyFormatter.format(decimal.doubleValue());
+    }
+
     /**
      * Calculate the overall amount owed to Donal or owed by Donal
      */
     private void updateNetBalance() {
-        float donalExpenseBalance = 0;
+        float bobExpenseBalance = 0;
 
         for (Transaction expense : expensesTableModel.GetAllTransactions()) {
-            donalExpenseBalance += expense.getBobPaid() - expense.getAnnPaid();
+            bobExpenseBalance += expense.getBobPaid() - expense.getAnnPaid();
         }
-        LOGGER.debug("Donal's net expenses balance is: " + donalExpenseBalance);
+        LOGGER.debug("Bob's net expenses balance is: " + bobExpenseBalance);
 
         // Get the net difference in payments
-        float donalPaymentBalance = 0;
+        float bobPaymentBalance = 0;
 
         for (Transaction payment : paymentsTableModel.GetAllTransactions()) {
-            donalPaymentBalance += payment.getBobPaid() - payment.getAnnPaid();
+            bobPaymentBalance += payment.getBobPaid() - payment.getAnnPaid();
         }
-        LOGGER.debug("Donal's net payments balance is: " + donalPaymentBalance);
+        LOGGER.debug("Bob's net payments balance is: " + bobPaymentBalance);
 
-        // Maude owes Donal for his net payments to her and 50% of his net
-        // contributions towards the expenses
-        this.netDonalBalance = (donalExpenseBalance / 2) + donalPaymentBalance;
-        LOGGER.debug("Donal's overall net balance is: " + this.netDonalBalance);
+        // Ann owes Bob for his net payments to her and 50% of his net contributions towards the expenses
+        this.netBobBalance = (bobExpenseBalance / 2) + bobPaymentBalance;
+        LOGGER.debug("Bob's overall net balance is: " + this.netBobBalance);
     }
 
     /**
@@ -342,7 +367,7 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void startup() {
+    private void initUI() {
 
         setSize(1050, 420);
         GuiUtils.loadApplicationImage(this);
@@ -518,26 +543,20 @@ public class MainFrame extends JFrame {
 
             if (answer == JOptionPane.YES_OPTION) {
 
-                controller.archiveTransactions(this.netDonalBalance);
+                controller.archiveTransactions(this.netBobBalance);
 
                 // Refresh the list of payments and expenses. At most, a single balancing
                 // payment should be returned
-                refreshGUI();
+                loadData();
             }
         } catch (RuntimeException ex) {
             handleFatalException(ex);
         }
     }
 
-    /**
-     * Handle any errors that may arise from accessing the database
-     * These should all be converted to subclasses of RuntimeException by Spring
-     *
-     * @param ex
-     */
-    private void handleFatalException(RuntimeException ex) {
+    private void handleFatalException(Exception ex) {
 
-        LOGGER.fatal("Error accessing database", ex);
+        LOGGER.fatal("Fatal error occurred", ex);
         JOptionPane.showMessageDialog(this,
                 "An unexpected error occurred.\nThe application will be shut down.\n"
                         + "Please consult the logs for further information.", "Fatal Error",

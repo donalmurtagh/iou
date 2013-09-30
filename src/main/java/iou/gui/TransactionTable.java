@@ -7,9 +7,6 @@ import javax.swing.*;
 
 public class TransactionTable extends JTable {
 
-    @SuppressWarnings("unused")
-    private static final Logger LOGGER = Logger.getLogger(TransactionTable.class);
-
     private static final long serialVersionUID = -5818651467677229726L;
 
     /*

@@ -14,11 +14,6 @@ public final class GuiUtils {
 
     private static Image applicationImage;
 
-    /**
-     * Formats a number to show two decimal places
-     */
-    private static final NumberFormat currencyFormatter = new DecimalFormat("#.##");
-
     private GuiUtils() {
     }
 
@@ -75,10 +70,5 @@ public final class GuiUtils {
 
         Cursor hourglassCursor = new Cursor(cursorType);
         window.setCursor(hourglassCursor);
-    }
-
-
-    public static String formatDecimal(Float decimal) {
-        return currencyFormatter.format(decimal.doubleValue());
     }
 }

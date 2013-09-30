@@ -51,10 +51,10 @@ public class ExpenseTableModel extends TransactionTableModel {
         } else if (column == ExpenseField.DESCRIPTION.getIndex()) {
             expense.setDescription(fieldValue);
 
-        } else if (column == ExpenseField.MAUDE_PAID.getIndex()) {
+        } else if (column == ExpenseField.ANN_PAID.getIndex()) {
             expense.setMaudePaid(new Float(fieldValue));
 
-        } else if (column == ExpenseField.DONAL_PAID.getIndex()) {
+        } else if (column == ExpenseField.BOB_PAID.getIndex()) {
             expense.setDonalPaid(new Float(fieldValue));
 
         } else {
@@ -81,10 +81,10 @@ public class ExpenseTableModel extends TransactionTableModel {
         } else if (columnIndex == ExpenseField.DESCRIPTION.getIndex()) {
             return expense.getDescription();
 
-        } else if (columnIndex == ExpenseField.MAUDE_PAID.getIndex()) {
+        } else if (columnIndex == ExpenseField.ANN_PAID.getIndex()) {
             return expense.getAnnPaid();
 
-        } else if (columnIndex == ExpenseField.DONAL_PAID.getIndex()) {
+        } else if (columnIndex == ExpenseField.BOB_PAID.getIndex()) {
             return expense.getBobPaid();
 
         } else {

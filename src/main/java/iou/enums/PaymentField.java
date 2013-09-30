@@ -2,8 +2,10 @@ package iou.enums;
 
 public enum PaymentField implements IField {
 
-    DATE("Date", DATE_COLUMN_INDEX), DESCRIPTION("Description", 1), PAID_BY("Paid by", 2), AMOUNT(
-            "Amount", 3);
+    DATE("Date", DATE_COLUMN_INDEX),
+    DESCRIPTION("Description", 1),
+    PAID_BY("Paid Ny", 2),
+    AMOUNT("Amount", 3);
 
     private String name;
 

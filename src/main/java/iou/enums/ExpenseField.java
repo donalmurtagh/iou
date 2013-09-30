@@ -2,8 +2,10 @@ package iou.enums;
 
 public enum ExpenseField implements IField {
 
-    DATE("Date", DATE_COLUMN_INDEX), DESCRIPTION("Description", 1), MAUDE_PAID("Maude paid", 2), DONAL_PAID(
-            "Donal paid", 3);
+    DATE("Date", DATE_COLUMN_INDEX),
+    DESCRIPTION("Description", 1),
+    ANN_PAID(User.ANN.getName() + " Paid", 2),
+    BOB_PAID(User.BOB.getName() + " Paid", 3);
 
     private String name;
 
