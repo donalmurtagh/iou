@@ -14,20 +14,17 @@ public class ControllerImpl implements Controller {
 
     private static final Logger LOGGER = Logger.getLogger(ControllerImpl.class);
 
-    private TransactionDao dao;
-
-    private final ApplicationContext applicationContext;
+    private final TransactionDao dao;
 
     public ControllerImpl() {
-        applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
+        dao = (TransactionDao) applicationContext.getBean("txnDao");
     }
 
     public boolean login(String username, String password) {
 
-        dao = (TransactionDao) applicationContext.getBean("txnDao");
-
         // Set the username and password, then try and login
-        BasicDataSource dataSource = (BasicDataSource) applicationContext.getBean("dataSource");
+        BasicDataSource dataSource = (BasicDataSource) dao.getDataSource();
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 

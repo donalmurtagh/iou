@@ -17,8 +17,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 
-public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements
-        TransactionDao {
+public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements TransactionDao {
 
     private static final Logger LOGGER = Logger.getLogger(JdbcTransactionDaoImpl.class);
 
