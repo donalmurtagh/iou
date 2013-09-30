@@ -40,7 +40,11 @@
         </property>
     </bean>
 
-    <bean id="controller" class="iou.controller.ControllerImpl" lazy-init="true">
+    <bean id="controller" class="iou.controller.ControllerImpl">
         <constructor-arg ref="transactionDao"/>
+    </bean>
+
+    <bean id="mainFrame" class="iou.gui.MainFrame" lazy-init="true">
+        <constructor-arg ref="controller"/>
     </bean>
 </beans>

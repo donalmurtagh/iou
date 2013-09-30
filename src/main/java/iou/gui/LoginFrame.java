@@ -53,14 +53,14 @@ public class LoginFrame extends javax.swing.JFrame {
             dataSource.setUsername(username);
             dataSource.setPassword(password);
 
-            LOGGER.debug("logging in with username: " + username);
+            LOGGER.debug("Attemping to login with username: " + username);
 
             try {
                 controller.login(username, password);
 
                 // Close this window and open the main window instead
                 dispose();
-                new MainFrame(controller);
+                applicationContext.getBean("mainFrame");
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Login failed. Likely causes:\n"
