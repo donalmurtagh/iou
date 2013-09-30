@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.awt.*;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -27,7 +26,7 @@ public class AppLauncher {
         LOGGER.debug("Launching login window");
 
         // Load the application's icon
-        URL imageFile = AppLauncher.class.getResource("/gui/dollar.gif");
+        URL imageFile = AppLauncher.class.getResource("/dollar.gif");
         LOGGER.debug("Loading application icon from: " + imageFile);
         Image appImage = Toolkit.getDefaultToolkit().getImage(imageFile);
         GuiUtils.setApplicationImage(appImage);
