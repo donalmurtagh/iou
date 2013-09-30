@@ -5,7 +5,7 @@ import iou.model.Transaction;
 
 import java.util.List;
 
-public interface IController {
+public interface Controller {
 
     boolean login(String username, String password);
 

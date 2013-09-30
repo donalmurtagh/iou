@@ -10,17 +10,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
 
-public class ControllerImpl implements IController {
+public class ControllerImpl implements Controller {
 
     private static final Logger LOGGER = Logger.getLogger(ControllerImpl.class);
 
-    private ITransactionDao dao;
+    private TransactionDao dao;
 
     public boolean login(String username, String password) {
 
         // Create the application context,
         ApplicationContext springContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
-        dao = (ITransactionDao) springContext.getBean("txnDao");
+        dao = (TransactionDao) springContext.getBean("txnDao");
 
         // Set the username and password, then try and login
         BasicDataSource dataSource = (BasicDataSource) springContext.getBean("dataSource");

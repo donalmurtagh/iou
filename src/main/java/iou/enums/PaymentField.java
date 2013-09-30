@@ -1,6 +1,6 @@
 package iou.enums;
 
-public enum PaymentField implements IField {
+public enum PaymentField implements Field {
 
     DATE("Date", DATE_COLUMN_INDEX),
     DESCRIPTION("Description", 1),

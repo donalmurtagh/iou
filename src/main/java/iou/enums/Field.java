@@ -1,6 +1,6 @@
 package iou.enums;
 
-public interface IField {
+public interface Field {
 
     String getName();
 

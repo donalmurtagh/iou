@@ -1,6 +1,6 @@
 package iou.enums;
 
-public enum ExpenseField implements IField {
+public enum ExpenseField implements Field {
 
     DATE("Date", DATE_COLUMN_INDEX),
     DESCRIPTION("Description", 1),

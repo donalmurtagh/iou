@@ -1,7 +1,7 @@
 package iou.gui;
 
+import iou.controller.Controller;
 import iou.controller.Factory;
-import iou.controller.IController;
 import iou.enums.User;
 import iou.util.GuiUtils;
 import org.apache.log4j.Logger;
@@ -45,7 +45,7 @@ public class LoginFrame extends javax.swing.JFrame {
             username = User.ANN.getUsername();
         }
 
-        IController controller = Factory.getController();
+        Controller controller = Factory.getController();
         LOGGER.debug("logging in with username: " + username);
 
         if (controller.login(username, password)) {

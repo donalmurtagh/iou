@@ -1,7 +1,6 @@
 package iou.gui;
 
-import iou.enums.IField;
-import org.apache.log4j.Logger;
+import iou.enums.Field;
 
 import javax.swing.*;
 
@@ -26,7 +25,7 @@ public class TransactionTable extends JTable {
      */
     @Override
     public Class<?> getColumnClass(int col) {
-        if (col == IField.DATE_COLUMN_INDEX) {
+        if (col == Field.DATE_COLUMN_INDEX) {
             return java.util.Date.class;
         }
 

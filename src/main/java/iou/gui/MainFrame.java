@@ -1,7 +1,7 @@
 package iou.gui;
 
+import iou.controller.Controller;
 import iou.controller.Factory;
-import iou.controller.IController;
 import iou.enums.*;
 import iou.model.*;
 import iou.util.GuiUtils;
@@ -47,7 +47,7 @@ public class MainFrame extends JFrame {
 
     private TransactionTableModel expensesTableModel;
 
-    private IController controller = Factory.getController();
+    private Controller controller = Factory.getController();
 
     private TransactionTableModel paymentsTableModel;
 

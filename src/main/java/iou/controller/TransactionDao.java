@@ -5,7 +5,7 @@ import iou.model.Transaction;
 
 import java.util.List;
 
-public interface ITransactionDao {
+public interface TransactionDao {
 
     public void testConnection();
 

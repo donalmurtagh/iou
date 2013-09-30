@@ -5,8 +5,6 @@ import org.apache.log4j.Logger;
 import javax.swing.*;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 public final class GuiUtils {
 
