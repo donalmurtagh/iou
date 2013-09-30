@@ -26,11 +26,11 @@ public abstract class Transaction {
         this.donalPaid = amount;
     }
 
-    public float getDonalPaid() {
+    public float getBobPaid() {
         return donalPaid;
     }
 
-    public float getMaudePaid() {
+    public float getAnnPaid() {
         return maudePaid;
     }
 

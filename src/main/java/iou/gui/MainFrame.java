@@ -204,7 +204,7 @@ public class MainFrame extends JFrame {
         float donalExpenseBalance = 0;
 
         for (Transaction expense : expensesTableModel.GetAllTransactions()) {
-            donalExpenseBalance += expense.getDonalPaid() - expense.getMaudePaid();
+            donalExpenseBalance += expense.getBobPaid() - expense.getAnnPaid();
         }
         LOGGER.debug("Donal's net expenses balance is: " + donalExpenseBalance);
 
@@ -212,7 +212,7 @@ public class MainFrame extends JFrame {
         float donalPaymentBalance = 0;
 
         for (Transaction payment : paymentsTableModel.GetAllTransactions()) {
-            donalPaymentBalance += payment.getDonalPaid() - payment.getMaudePaid();
+            donalPaymentBalance += payment.getBobPaid() - payment.getAnnPaid();
         }
         LOGGER.debug("Donal's net payments balance is: " + donalPaymentBalance);
 
@@ -509,13 +509,12 @@ public class MainFrame extends JFrame {
 
         try {
 
-            int answer = JOptionPane
-                    .showConfirmDialog(
-                            this,
-                            "Are you sure you want to archive all payments and expenses?\n"
-                                    + "This will cause all currently displayed payments and expenses to be replaced "
-                                    + "by a single balancing payment.", "Confirm Archive",
-                            JOptionPane.YES_NO_OPTION);
+            int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to archive all payments and expenses?\n"
+                            + "This will cause all currently displayed payments and expenses to be replaced "
+                            + "by a single balancing payment.", "Confirm Archive",
+                    JOptionPane.YES_NO_OPTION);
 
             if (answer == JOptionPane.YES_OPTION) {
 

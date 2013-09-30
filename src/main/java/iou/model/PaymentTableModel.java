@@ -90,10 +90,10 @@ public class PaymentTableModel extends TransactionTableModel {
         } else if (columnIndex == PaymentField.PAID_BY.getIndex()) {
 
             //LOGGER.debug("Getting payee for payment: " + payment);
-            if (payment.getDonalPaid() != 0) {
+            if (payment.getBobPaid() != 0) {
                 return User.BOB;
 
-            } else if (payment.getMaudePaid() != 0) {
+            } else if (payment.getAnnPaid() != 0) {
                 return User.ANN;
 
             } else {
@@ -103,11 +103,11 @@ public class PaymentTableModel extends TransactionTableModel {
 
         } else if (columnIndex == PaymentField.AMOUNT.getIndex()) {
 
-            if (payment.getDonalPaid() != 0) {
-                return payment.getDonalPaid();
+            if (payment.getBobPaid() != 0) {
+                return payment.getBobPaid();
 
-            } else if (payment.getMaudePaid() != 0) {
-                return payment.getMaudePaid();
+            } else if (payment.getAnnPaid() != 0) {
+                return payment.getAnnPaid();
 
             } else {
                 throw new RuntimeException("Could not determine payee for record ID: "

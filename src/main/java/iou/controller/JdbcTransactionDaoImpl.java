@@ -23,7 +23,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements
     private static final Logger LOGGER = Logger.getLogger(JdbcTransactionDaoImpl.class);
 
     private static final String GET_TRANS_SQL =
-            "select id, type, tran_date, description, maude_paid, donal_paid "
+            "select id, type, tran_date, description, ann_paid, bob_paid "
                     + "from transaction "
                     + "where archived = 0 "
                     + "and type = ?";
@@ -33,8 +33,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements
      * TODO: Replace with named params
      */
     private static final String INSERT_TRAN_SQL =
-            "insert into TRANSACTION (type, tran_date, description, maude_paid, donal_paid) "
-                    + "values (?, ?, ?, ?, ?)";
+            "insert into TRANSACTION (type, tran_date, description, ann_paid, bob_paid) values(?, ?, ?, ?, ?)";
 
     private static final String DELETE_TRAN_SQL =
             "delete from transaction where id = ?";
@@ -47,8 +46,8 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements
                     "set type = ?, " +
                     "tran_date = ?, " +
                     "description = ?, " +
-                    "maude_paid = ?, " +
-                    "donal_paid = ? " +
+                    "ann_paid = ?, " +
+                    "bob_paid = ? " +
                     "where id = ?";
 
     private static final String ARCHIVE_TRANS_SQL =
@@ -94,7 +93,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements
         public boolean doUpdate(Transaction tran) {
 
             Object[] params = {tran.getTransactionType().toString(), tran.getDate(),
-                    tran.getDescription(), tran.getMaudePaid(), tran.getDonalPaid(),
+                    tran.getDescription(), tran.getAnnPaid(), tran.getBobPaid(),
                     tran.getId()};
 
             int rowsAffected = update(params);
@@ -139,20 +138,18 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements
         // TODO: maybe this instance of PreparedStatementCreator could be
         // reused, rather than creating a new object each time this method is called
         getJdbcTemplate().update(new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(Connection connection)
-                    throws SQLException {
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 
-                PreparedStatement ps = connection.prepareStatement(INSERT_TRAN_SQL);
+                PreparedStatement ps = connection.prepareStatement(INSERT_TRAN_SQL, Statement.RETURN_GENERATED_KEYS);
 
-                // Parameters order is: type, tran_date, description,
-                // maude_paid, donal_paid
+                // Parameters order is: type, tran_date, description, ann_paid, bob_paid
                 ps.setString(1, tran.getTransactionType().toString());
 
                 Date sqlDate = new Date(tran.getDate().getTime());
                 ps.setDate(2, sqlDate);
                 ps.setString(3, tran.getDescription());
-                ps.setFloat(4, tran.getMaudePaid());
-                ps.setFloat(5, tran.getDonalPaid());
+                ps.setFloat(4, tran.getAnnPaid());
+                ps.setFloat(5, tran.getBobPaid());
 
                 return ps;
             }
@@ -179,8 +176,8 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements
             tran.setId(rs.getLong("id"));
             tran.setDate(rs.getDate("tran_date"));
             tran.setDescription(rs.getString("description"));
-            tran.setDonalPaid(rs.getFloat("donal_paid"));
-            tran.setMaudePaid(rs.getFloat("maude_paid"));
+            tran.setDonalPaid(rs.getFloat("bob_paid"));
+            tran.setMaudePaid(rs.getFloat("ann_paid"));
             return tran;
         }
     };

@@ -3,6 +3,7 @@ package iou.gui;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import iou.enums.TranDialogMode;
+import iou.enums.User;
 import iou.model.Transaction;
 import iou.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
@@ -27,7 +28,7 @@ public class TransactionDialog extends javax.swing.JDialog {
 
     private JTextField descField;
 
-    private JLabel donalLabel;
+    private JLabel bobLabel;
 
     private static final float MAX_AMOUNT = 10000;
 
@@ -46,9 +47,9 @@ public class TransactionDialog extends javax.swing.JDialog {
     private Transaction tran;
 
     // TODO Add decimal masks to these fields
-    private JTextField donalField = new JTextField();
+    private JTextField bobField = new JTextField();
 
-    private JTextField maudeField = new JTextField();
+    private JTextField annField = new JTextField();
 
     private boolean isValidTransaction = false;
 
@@ -109,8 +110,8 @@ public class TransactionDialog extends javax.swing.JDialog {
     private boolean updateTransaction() {
 
         // Check that at least one amount has been provided
-        if (StringUtils.isBlank(maudeField.getText())
-                && StringUtils.isBlank(donalField.getText())) {
+        if (StringUtils.isBlank(annField.getText())
+                && StringUtils.isBlank(bobField.getText())) {
 
             JOptionPane.showMessageDialog(this,
                     "Please enter an amount in either 'Maude Paid' or 'Donal Paid'",
@@ -128,8 +129,8 @@ public class TransactionDialog extends javax.swing.JDialog {
                 tran.setDate(DateUtils.string2Date(dateField.getText()));
             }
             tran.setDescription(descField.getText());
-            tran.setMaudePaid(validateAmount(maudeField.getText()));
-            tran.setDonalPaid(validateAmount(donalField.getText()));
+            tran.setMaudePaid(validateAmount(annField.getText()));
+            tran.setDonalPaid(validateAmount(bobField.getText()));
 
             return true;
 
@@ -219,7 +220,6 @@ public class TransactionDialog extends javax.swing.JDialog {
             jPanel2.add(dateLabel, new CellConstraints("2, 2, 1, 1, default, default"));
             dateLabel.setText("Date:");
 
-
             jPanel2.add(dateField, new CellConstraints("4, 2, 1, 1, default, default"));
             dateField.setName("dateField");
             dateField.setPreferredSize(new java.awt.Dimension(174, 21));
@@ -231,44 +231,42 @@ public class TransactionDialog extends javax.swing.JDialog {
 
             descField = new JTextField();
             jPanel2.add(descField, new CellConstraints("4, 4, 1, 1, default, default"));
-            descField.setName("descField");
             descField.setText(tran.getDescription());
 
-            JLabel maudeLabel = new JLabel();
-            jPanel2.add(maudeLabel, new CellConstraints("2, 6, 1, 1, default, default"));
-            maudeLabel.setName("maudeLabel");
+            JLabel annLabel = new JLabel();
+            jPanel2.add(annLabel, new CellConstraints("2, 6, 1, 1, default, default"));
+            annLabel.setText(User.ANN.getName() + " Paid:");
 
-            jPanel2.add(maudeField, new CellConstraints("4, 6, 1, 1, default, default"));
-            maudeField.setName("maudeField");
-            if (tran.getMaudePaid() != 0) {
-                maudeField.setText(String.valueOf(tran.getMaudePaid()));
+            jPanel2.add(annField, new CellConstraints("4, 6, 1, 1, default, default"));
+            annField.setName("annField");
+            if (tran.getAnnPaid() != 0) {
+                annField.setText(String.valueOf(tran.getAnnPaid()));
             }
 
-            jPanel2.add(donalField, new CellConstraints("4, 8, 1, 1, default, default"));
-            donalField.setName("donalField");
-            if (tran.getDonalPaid() != 0) {
-                donalField.setText(String.valueOf(tran.getDonalPaid()));
+            jPanel2.add(bobField, new CellConstraints("4, 8, 1, 1, default, default"));
+            bobField.setName("bobField");
+            if (tran.getBobPaid() != 0) {
+                bobField.setText(String.valueOf(tran.getBobPaid()));
             }
 
-            donalLabel = new JLabel();
-            jPanel2.add(donalLabel, new CellConstraints("2, 8, 1, 1, default, default"));
-            donalLabel.setName("donalLabel");
+            bobLabel = new JLabel();
+            jPanel2.add(bobLabel, new CellConstraints("2, 8, 1, 1, default, default"));
+            bobLabel.setText(User.BOB.getName() + " Paid:");
 
             // Add listeners to ensure that text can only be entered in one of the amount
             // fields when adding or updating a payment
             if (this.mode == TranDialogMode.ADD_PAYMENT
                     || this.mode == TranDialogMode.UPDATE_PAYMENT) {
 
-                maudeField.getDocument().addDocumentListener(
-                        new PaymentAmountFieldListener(donalField));
-                donalField.getDocument().addDocumentListener(
-                        new PaymentAmountFieldListener(maudeField));
+                annField.getDocument().addDocumentListener(
+                        new PaymentAmountFieldListener(bobField));
+                bobField.getDocument().addDocumentListener(
+                        new PaymentAmountFieldListener(annField));
             }
 
             pack();
             this.setSize(300, 214);
-            Application.getInstance().getContext().getResourceMap(getClass())
-                    .injectComponents(getContentPane());
+            Application.getInstance().getContext().getResourceMap(getClass()).injectComponents(getContentPane());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -82,10 +82,10 @@ public class ExpenseTableModel extends TransactionTableModel {
             return expense.getDescription();
 
         } else if (columnIndex == ExpenseField.MAUDE_PAID.getIndex()) {
-            return expense.getMaudePaid();
+            return expense.getAnnPaid();
 
         } else if (columnIndex == ExpenseField.DONAL_PAID.getIndex()) {
-            return expense.getDonalPaid();
+            return expense.getBobPaid();
 
         } else {
             throw new IllegalArgumentException("Invalid column index: " + columnIndex);
