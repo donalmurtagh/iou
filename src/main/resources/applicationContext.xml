@@ -7,34 +7,30 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
-	
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost/iou"/>
-		<!--  
-		<property name="username" value="${ds.username}"/>
-		<property name="password" value="${ds.password}"/>
-		-->
-	</bean>
 
-	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-	  	<property name="dataSource" ref="dataSource"/>
-	</bean>
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost/iou"/>
+    </bean>
 
-	<aop:config>
-    	<aop:advisor pointcut="execution(* iou.controller.IController.*(..))" advice-ref="txAdvice"/>
-  	</aop:config>
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
-	<tx:advice id="txAdvice" transaction-manager="txManager">
-		<tx:attributes>
-		<tx:method name="*" read-only="false" />
-		</tx:attributes>
-	</tx:advice>
+    <aop:config>
+        <aop:advisor pointcut="execution(* iou.controller.Controller.*(..))" advice-ref="txAdvice"/>
+    </aop:config>
+
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="*" read-only="false"/>
+        </tx:attributes>
+    </tx:advice>
 
 
-	<bean id="txnDao" class="iou.controller.JdbcTransactionDaoImpl">
-		<property name="dataSource">
-			<ref local="dataSource"/>
-		</property>
-	</bean>	
+    <bean id="txnDao" class="iou.controller.JdbcTransactionDaoImpl">
+        <property name="dataSource">
+            <ref local="dataSource"/>
+        </property>
+    </bean>
 </beans>
