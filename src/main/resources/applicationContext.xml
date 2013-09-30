@@ -39,4 +39,8 @@
             <ref local="dataSource"/>
         </property>
     </bean>
+
+    <bean id="controller" class="iou.controller.ControllerImpl" lazy-init="true">
+        <constructor-arg ref="transactionDao"/>
+    </bean>
 </beans>

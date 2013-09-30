@@ -16,17 +16,11 @@ public class ControllerImpl implements Controller {
 
     private final TransactionDao transactionDao;
 
-    public ControllerImpl() {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
-        transactionDao = (TransactionDao) applicationContext.getBean("transactionDao");
+    public ControllerImpl(TransactionDao transactionDao) {
+        this.transactionDao = transactionDao;
     }
 
     public boolean login(String username, String password) {
-
-        // Set the username and password, then try and login
-        BasicDataSource dataSource = (BasicDataSource) transactionDao.getDataSource();
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
 
         try {
             transactionDao.testConnection();
@@ -71,7 +65,6 @@ public class ControllerImpl implements Controller {
             if (netBobBalance > 0) {
                 balancingPayment.setBobPaid(netBobBalance);
             } else {
-
                 // Ann owes Bob, change the sign of the amount before inserting
                 balancingPayment.setAnnPaid(-netBobBalance);
             }

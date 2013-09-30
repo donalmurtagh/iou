@@ -19,6 +19,4 @@ public interface TransactionDao {
     public boolean updateTransaction(Transaction tran);
 
     public void archiveTransactions();
-
-    public DataSource getDataSource();
 }

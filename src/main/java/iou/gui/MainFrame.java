@@ -1,7 +1,6 @@
 package iou.gui;
 
 import iou.controller.Controller;
-import iou.controller.Factory;
 import iou.enums.*;
 import iou.model.*;
 import iou.util.GuiUtils;
@@ -47,7 +46,7 @@ public class MainFrame extends JFrame {
 
     private TransactionTableModel expensesTableModel;
 
-    private Controller controller = Factory.getController();
+    private final Controller controller;
 
     private TransactionTableModel paymentsTableModel;
 
@@ -64,8 +63,10 @@ public class MainFrame extends JFrame {
 
     private static final Logger LOGGER = Logger.getLogger(MainFrame.class);
 
-    public MainFrame() {
+    public MainFrame(Controller controller) {
+
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
+        this.controller = controller;
         initUI();
 
         try {

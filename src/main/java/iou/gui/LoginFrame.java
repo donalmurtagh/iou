@@ -1,11 +1,13 @@
 package iou.gui;
 
 import iou.controller.Controller;
-import iou.controller.Factory;
 import iou.enums.User;
 import iou.util.GuiUtils;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Application;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,15 +46,20 @@ public class LoginFrame extends javax.swing.JFrame {
             if (annButton.isSelected()) {
                 username = User.ANN.getUsername();
             }
+            ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
 
-            Controller controller = Factory.getController();
+            Controller controller = (Controller) applicationContext.getBean("controller");
+            BasicDataSource dataSource = (BasicDataSource) applicationContext.getBean("dataSource");
+            dataSource.setUsername(username);
+            dataSource.setPassword(password);
+
             LOGGER.debug("logging in with username: " + username);
 
             if (controller.login(username, password)) {
 
                 // Close this window and open the main window instead
                 this.dispose();
-                new MainFrame();
+                new MainFrame(controller);
 
 
             } else {
