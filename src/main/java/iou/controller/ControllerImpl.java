@@ -29,13 +29,13 @@ public class ControllerImpl implements Controller {
 
         try {
             dao.testConnection();
+            LOGGER.debug("Connection successfully tested");
+            return true;
+
         } catch (Exception ex) {
             LOGGER.error("DB connection test failed", ex);
             return false;
         }
-
-        LOGGER.debug("Connection successfully tested");
-        return true;
     }
 
     public List<Transaction> getTransactions(TransactionType type) {
