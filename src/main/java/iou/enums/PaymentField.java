@@ -4,7 +4,7 @@ public enum PaymentField implements Field {
 
     DATE("Date", DATE_COLUMN_INDEX),
     DESCRIPTION("Description", 1),
-    PAID_BY("Paid Ny", 2),
+    PAID_BY("Paid By", 2),
     AMOUNT("Amount", 3);
 
     private String name;
