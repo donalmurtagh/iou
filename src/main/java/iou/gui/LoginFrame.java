@@ -15,14 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * This code was edited or generated using CloudGarden's Jigloo SWT/Swing GUI
- * Builder, which is free for non-commercial use. If Jigloo is being used
- * commercially (ie, by a corporation, company or business for any purpose
- * whatever) then you should purchase a license for each developer using Jigloo.
- * Please visit www.cloudgarden.com for details. Use of Jigloo implies
- * acceptance of these licensing terms. A COMMERCIAL LICENSE HAS NOT BEEN
- * PURCHASED FOR THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED LEGALLY FOR
- * ANY CORPORATE OR COMMERCIAL PURPOSE.
+ * The login dialog box
  */
 public class LoginFrame extends javax.swing.JFrame {
 
@@ -38,8 +31,8 @@ public class LoginFrame extends javax.swing.JFrame {
 
         // Change the cursor to an hourglass
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
-        try {
 
+        try {
             User currentUser = annButton.isSelected() ? User.ANN : User.BOB;
             String username = currentUser.getUsername();
             String password = new String(passwordField.getPassword());
@@ -93,73 +86,68 @@ public class LoginFrame extends javax.swing.JFrame {
     }
 
     private void initGUI() {
-        try {
-            GuiUtils.loadApplicationImage(this);
-            setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        GuiUtils.loadApplicationImage(this);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-            JPanel jPanel3 = new JPanel();
-            getContentPane().add(jPanel3, BorderLayout.SOUTH);
-            jPanel3.setPreferredSize(new java.awt.Dimension(392, 44));
+        JPanel jPanel3 = new JPanel();
+        getContentPane().add(jPanel3, BorderLayout.SOUTH);
+        jPanel3.setPreferredSize(new java.awt.Dimension(392, 44));
 
-            JButton loginButton = new JButton();
-            loginButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    doLogin();
-                }
-            });
+        JButton loginButton = new JButton();
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                doLogin();
+            }
+        });
 
-            jPanel3.add(loginButton);
-            loginButton.setText("Login");
+        jPanel3.add(loginButton);
+        loginButton.setText("Login");
 
-            // The login button handles the enter key press
-            getRootPane().setDefaultButton(loginButton);
+        // The login button handles the enter key press
+        getRootPane().setDefaultButton(loginButton);
 
-            JButton cancelButton = new JButton();
-            jPanel3.add(cancelButton);
-            cancelButton.setText("Cancel");
+        JButton cancelButton = new JButton();
+        jPanel3.add(cancelButton);
+        cancelButton.setText("Cancel");
 
-            cancelButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    System.exit(0);
-                }
-            });
+        cancelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
 
-            JPanel jPanel1 = new JPanel();
-            getContentPane().add(jPanel1, BorderLayout.NORTH);
-            jPanel1.setPreferredSize(new java.awt.Dimension(392, 37));
+        JPanel jPanel1 = new JPanel();
+        getContentPane().add(jPanel1, BorderLayout.NORTH);
+        jPanel1.setPreferredSize(new java.awt.Dimension(392, 37));
 
-            annButton = new JRadioButton();
-            jPanel1.add(annButton);
-            annButton.setText(User.ANN.getName());
+        annButton = new JRadioButton();
+        jPanel1.add(annButton);
+        annButton.setText(User.ANN.getName());
 
-            JRadioButton bobButton = new JRadioButton();
-            jPanel1.add(bobButton);
-            bobButton.setText(User.BOB.getName());
-            bobButton.setSelected(true);
+        JRadioButton bobButton = new JRadioButton();
+        jPanel1.add(bobButton);
+        bobButton.setText(User.BOB.getName());
+        bobButton.setSelected(true);
 
-            ButtonGroup group = new ButtonGroup();
-            group.add(annButton);
-            group.add(bobButton);
+        ButtonGroup group = new ButtonGroup();
+        group.add(annButton);
+        group.add(bobButton);
 
-            JPanel jPanel2 = new JPanel();
-            getContentPane().add(jPanel2, BorderLayout.CENTER);
-            jPanel2.setPreferredSize(new java.awt.Dimension(392, 65));
+        JPanel jPanel2 = new JPanel();
+        getContentPane().add(jPanel2, BorderLayout.CENTER);
+        jPanel2.setPreferredSize(new java.awt.Dimension(392, 65));
 
-            JLabel passwordLabel = new JLabel();
-            jPanel2.add(passwordLabel);
-            passwordLabel.setText("Enter Password:");
+        JLabel passwordLabel = new JLabel();
+        jPanel2.add(passwordLabel);
+        passwordLabel.setText("Enter Password:");
 
-            passwordField = new JPasswordField();
-            jPanel2.add(passwordField);
-            passwordField.setName("passwordField");
-            passwordField.setPreferredSize(new java.awt.Dimension(161, 21));
+        passwordField = new JPasswordField();
+        jPanel2.add(passwordField);
+        passwordField.setName("passwordField");
+        passwordField.setPreferredSize(new java.awt.Dimension(161, 21));
 
-            pack();
-            this.setSize(400, 153);
-            Application.getInstance().getContext().getResourceMap(getClass()).injectComponents(getContentPane());
-        } catch (Exception e) {
-            LOGGER.error("Error initialising login window", e);
-        }
+        pack();
+        this.setSize(400, 153);
+        Application.getInstance().getContext().getResourceMap(getClass()).injectComponents(getContentPane());
     }
-
 }
