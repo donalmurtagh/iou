@@ -40,12 +40,10 @@ public class LoginFrame extends javax.swing.JFrame {
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
         try {
 
-            String username = User.BOB.getUsername();
+            User currentUser = annButton.isSelected() ? User.ANN : User.BOB;
+            String username = currentUser.getUsername();
             String password = new String(passwordField.getPassword());
 
-            if (annButton.isSelected()) {
-                username = User.ANN.getUsername();
-            }
             ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
 
             Controller controller = (Controller) applicationContext.getBean("controller");
