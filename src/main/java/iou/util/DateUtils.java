@@ -20,15 +20,6 @@ public final class DateUtils {
     private DateUtils() {
     }
 
-    /**
-     * Returns a clone of the date formatter being used in a half-hearted attempt
-     * at considering thread-safety (these objects are not synchronized). 
-     * @return
-     */
-    public static DateFormat getDateFormat() {
-        return (DateFormat)dateFormatter.clone();
-    }
-
     public static Date string2Date(String str) throws ParseException {
 
         LOGGER.debug("Parsing date string: " + str);
