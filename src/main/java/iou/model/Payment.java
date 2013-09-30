@@ -9,28 +9,28 @@ public class Payment extends Transaction {
     }
 
     /**
-     * The amount Donal paid Maude.
+     * The amount Bob paid Ann.
      */
     @Override
-    public void setDonalPaid(float amount) {
+    public void setBobPaid(float amount) {
 
-        // If Donal paid Maude, then Maude cannot also have paid Donal
+        // If Bob paid Ann, then Ann cannot also have paid Bob
         if (amount != 0) {
-            super.setDonalPaid(amount);
-            super.setMaudePaid(0);
+            super.setBobPaid(amount);
+            super.setAnnPaid(0);
         }
     }
 
     /**
-     * The amount Maude paid Donal
+     * The amount Ann paid Bob
      */
     @Override
-    public void setMaudePaid(float amount) {
+    public void setAnnPaid(float amount) {
 
-        // If Maude paid Donal, then Donal cannot also have paid Maude
+        // If Abb paid Bob, then Bob cannot also have paid Ann
         if (amount != 0) {
-            super.setMaudePaid(amount);
-            super.setDonalPaid(0);
+            super.setAnnPaid(amount);
+            super.setBobPaid(0);
         }
     }
 }

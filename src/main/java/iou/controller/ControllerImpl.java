@@ -54,25 +54,25 @@ public class ControllerImpl implements Controller {
         return dao.deleteTransaction(id);
     }
 
-    public void archiveTransactions(Float netDonalBalance) {
+    public void archiveTransactions(Float netBobBalance) {
 
         // Archive all current transactions
         dao.archiveTransactions();
 
-        if (netDonalBalance != 0) {
+        if (netBobBalance != 0) {
 
             // Carry the balance forward by inserting a new payment for the relevant amount
             Transaction balancingPayment = new Payment();
             balancingPayment.setDate(new java.util.Date());
             balancingPayment.setDescription("Balance brought forward");
 
-            // A positive netDonalPaid indicates that donal owes maude and vice versa
-            if (netDonalBalance > 0) {
-                balancingPayment.setDonalPaid(netDonalBalance);
+            // A positive netBobBalance indicates that Bob owes Ann and vice versa
+            if (netBobBalance > 0) {
+                balancingPayment.setBobPaid(netBobBalance);
             } else {
 
-                // Maude owes Donal, change the sign of the amount before inserting
-                balancingPayment.setMaudePaid(-netDonalBalance);
+                // Ann owes Bob, change the sign of the amount before inserting
+                balancingPayment.setAnnPaid(-netBobBalance);
             }
             insertTransaction(balancingPayment);
         }

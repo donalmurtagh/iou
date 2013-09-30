@@ -224,7 +224,7 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * Calculate the overall amount owed to Donal or owed by Donal
+     * Calculate the overall amount owed to Bob or owed by Bob
      */
     private void updateNetBalance() {
         float bobExpenseBalance = 0;

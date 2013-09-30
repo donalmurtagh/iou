@@ -55,10 +55,10 @@ public class PaymentTableModel extends TransactionTableModel {
         } else if (column == PaymentField.PAID_BY.getIndex()) {
 
             if (aValue.toString().equals(User.ANN)) {
-                payment.setMaudePaid(new Float(fieldValue));
+                payment.setAnnPaid(new Float(fieldValue));
 
             } else if (aValue.toString().equals(User.BOB)) {
-                payment.setDonalPaid(new Float(fieldValue));
+                payment.setBobPaid(new Float(fieldValue));
 
             } else {
                 throw new IllegalArgumentException("Unrecognised user: " + aValue);

@@ -11,27 +11,27 @@ public abstract class Transaction {
     private String description;
     private Date date = new Date();
     private long id;
-    private float maudePaid;
-    private float donalPaid;
+    private float annPaid;
+    private float bobPaid;
 
     public Transaction(TransactionType type) {
         this.type = type;
     }
 
-    public void setMaudePaid(float amount) {
-        this.maudePaid = amount;
+    public void setAnnPaid(float amount) {
+        this.annPaid = amount;
     }
 
-    public void setDonalPaid(float amount) {
-        this.donalPaid = amount;
+    public void setBobPaid(float amount) {
+        this.bobPaid = amount;
     }
 
     public float getBobPaid() {
-        return donalPaid;
+        return bobPaid;
     }
 
     public float getAnnPaid() {
-        return maudePaid;
+        return annPaid;
     }
 
     public long getId() {
@@ -64,8 +64,9 @@ public abstract class Transaction {
 
     @Override
     public String toString() {
-        return "id=" + id + ", description=" + description + ", date=" + date
-                + ", maude paid=" + maudePaid + ", donal paid=" + donalPaid;
+
+        return String.format("id=%s, description=%s, date=%s, ann paid=%s, bob paid=%s",
+                id, description, date, annPaid, bobPaid);
     }
 
     @Override

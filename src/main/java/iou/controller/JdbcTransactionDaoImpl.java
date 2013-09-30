@@ -176,8 +176,8 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements
             tran.setId(rs.getLong("id"));
             tran.setDate(rs.getDate("tran_date"));
             tran.setDescription(rs.getString("description"));
-            tran.setDonalPaid(rs.getFloat("bob_paid"));
-            tran.setMaudePaid(rs.getFloat("ann_paid"));
+            tran.setBobPaid(rs.getFloat("bob_paid"));
+            tran.setAnnPaid(rs.getFloat("ann_paid"));
             return tran;
         }
     };

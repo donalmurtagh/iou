@@ -52,10 +52,10 @@ public class ExpenseTableModel extends TransactionTableModel {
             expense.setDescription(fieldValue);
 
         } else if (column == ExpenseField.ANN_PAID.getIndex()) {
-            expense.setMaudePaid(new Float(fieldValue));
+            expense.setAnnPaid(new Float(fieldValue));
 
         } else if (column == ExpenseField.BOB_PAID.getIndex()) {
-            expense.setDonalPaid(new Float(fieldValue));
+            expense.setBobPaid(new Float(fieldValue));
 
         } else {
             throw new IllegalArgumentException("Invalid column index: " + column);

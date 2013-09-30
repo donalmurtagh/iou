@@ -113,9 +113,10 @@ public class TransactionDialog extends javax.swing.JDialog {
         if (StringUtils.isBlank(annField.getText())
                 && StringUtils.isBlank(bobField.getText())) {
 
-            JOptionPane.showMessageDialog(this,
-                    "Please enter an amount in either 'Maude Paid' or 'Donal Paid'",
-                    "Missing Amount", JOptionPane.ERROR_MESSAGE);
+            String missingPayeeMsg = String.format("Please enter an amount in either '%s Paid' or '%s Paid'",
+                    User.ANN.getName(),
+                    User.BOB.getName());
+            JOptionPane.showMessageDialog(this, missingPayeeMsg, "Missing Amount", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -129,8 +130,8 @@ public class TransactionDialog extends javax.swing.JDialog {
                 tran.setDate(DateUtils.string2Date(dateField.getText()));
             }
             tran.setDescription(descField.getText());
-            tran.setMaudePaid(validateAmount(annField.getText()));
-            tran.setDonalPaid(validateAmount(bobField.getText()));
+            tran.setAnnPaid(validateAmount(annField.getText()));
+            tran.setBobPaid(validateAmount(bobField.getText()));
 
             return true;
 

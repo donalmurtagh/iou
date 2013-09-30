@@ -21,7 +21,7 @@ public interface Controller {
      * Archive all existing transactions and insert a payment transaction that
      * carries forward the current balance
      *
-     * @param netDonalBalance
+     * @param netBalance
      */
-    public void archiveTransactions(Float netDonalBalance);
+    public void archiveTransactions(Float netBalance);
 }
