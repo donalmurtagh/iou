@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface TransactionDao {
 
-    public void testConnection();
+    void testConnection();
 
-    public List<Transaction> getTransactions(TransactionType type);
+    List<Transaction> getTransactions(TransactionType type);
 
-    public Transaction insertTransaction(final Transaction tran);
+    Transaction insertTransaction(final Transaction tran);
 
-    public boolean deleteTransaction(Long id);
+    boolean deleteTransaction(Long id);
 
-    public boolean updateTransaction(Transaction tran);
+    boolean updateTransaction(Transaction tran);
 
-    public void archiveTransactions();
+    void archiveTransactions();
 }

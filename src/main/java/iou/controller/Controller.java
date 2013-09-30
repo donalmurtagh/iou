@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface Controller {
 
-    boolean login(String username, String password);
+    void login(String username, String password);
 
-    public List<Transaction> getTransactions(TransactionType type);
+    List<Transaction> getTransactions(TransactionType type);
 
-    public Transaction insertTransaction(Transaction tran);
+    Transaction insertTransaction(Transaction tran);
 
-    public boolean updateTransaction(Transaction tran);
+    boolean updateTransaction(Transaction tran);
 
-    public boolean deleteTransaction(Long id);
+    boolean deleteTransaction(Long id);
 
     /**
      * Archive all existing transactions and insert a payment transaction that
@@ -23,5 +23,5 @@ public interface Controller {
      *
      * @param netBalance
      */
-    public void archiveTransactions(Float netBalance);
+    void archiveTransactions(Float netBalance);
 }

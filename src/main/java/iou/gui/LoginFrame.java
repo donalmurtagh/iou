@@ -55,14 +55,14 @@ public class LoginFrame extends javax.swing.JFrame {
 
             LOGGER.debug("logging in with username: " + username);
 
-            if (controller.login(username, password)) {
+            try {
+                controller.login(username, password);
 
                 // Close this window and open the main window instead
-                this.dispose();
+                dispose();
                 new MainFrame(controller);
 
-
-            } else {
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Login failed. Likely causes:\n"
                         + "- Password typed incorrectly\n" + "- Database is not running",
                         "Login Error", JOptionPane.ERROR_MESSAGE);
