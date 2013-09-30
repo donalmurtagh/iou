@@ -35,35 +35,35 @@ public class LoginFrame extends javax.swing.JFrame {
     private void doLogin() {
 
         // Change the cursor to an hourglass
-        Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR);
-        setCursor(hourglassCursor);
+        GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
+        try {
 
-        String username = User.BOB.getUsername();
-        String password = new String(passwordField.getPassword());
+            String username = User.BOB.getUsername();
+            String password = new String(passwordField.getPassword());
 
-        if (annButton.isSelected()) {
-            username = User.ANN.getUsername();
+            if (annButton.isSelected()) {
+                username = User.ANN.getUsername();
+            }
+
+            Controller controller = Factory.getController();
+            LOGGER.debug("logging in with username: " + username);
+
+            if (controller.login(username, password)) {
+
+                // Close this window and open the main window instead
+                this.dispose();
+                new MainFrame();
+
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Login failed. Likely causes:\n"
+                        + "- Password typed incorrectly\n" + "- Database is not running",
+                        "Login Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } finally {
+            // Change the cursor back
+            GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
         }
-
-        Controller controller = Factory.getController();
-        LOGGER.debug("logging in with username: " + username);
-
-        if (controller.login(username, password)) {
-
-            // Close this window and open the main window instead
-            this.dispose();
-            new MainFrame();
-
-
-        } else {
-            JOptionPane.showMessageDialog(this, "Login failed. Likely causes:\n"
-                    + "- Password typed incorrectly\n" + "- Database is not running",
-                    "Login Error", JOptionPane.ERROR_MESSAGE);
-        }
-
-        // Change the cursor back
-        Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
-        setCursor(normalCursor);
     }
 
     /**
