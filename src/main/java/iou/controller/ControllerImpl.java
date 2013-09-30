@@ -16,14 +16,18 @@ public class ControllerImpl implements Controller {
 
     private TransactionDao dao;
 
+    private final ApplicationContext applicationContext;
+
+    public ControllerImpl() {
+        applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
+    }
+
     public boolean login(String username, String password) {
 
-        // Create the application context,
-        ApplicationContext springContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
-        dao = (TransactionDao) springContext.getBean("txnDao");
+        dao = (TransactionDao) applicationContext.getBean("txnDao");
 
         // Set the username and password, then try and login
-        BasicDataSource dataSource = (BasicDataSource) springContext.getBean("dataSource");
+        BasicDataSource dataSource = (BasicDataSource) applicationContext.getBean("dataSource");
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 
