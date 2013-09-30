@@ -70,7 +70,7 @@ public class MainFrame extends JFrame {
 
         try {
             Properties messages = new Properties();
-            messages.load(getClass().getResourceAsStream("/gui/messages.properties"));
+            messages.load(getClass().getResourceAsStream("/config.properties"));
             String currencySymbol = messages.getProperty("currency.symbol");
             currencyFormatter = new DecimalFormat(currencySymbol + "#.##");
 

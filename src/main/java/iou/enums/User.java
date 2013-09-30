@@ -13,7 +13,7 @@ public enum User {
         Properties messages = new Properties();
 
         try {
-            messages.load(getClass().getResourceAsStream("/gui/messages.properties"));
+            messages.load(getClass().getResourceAsStream("/config.properties"));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
