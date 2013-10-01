@@ -25,6 +25,3 @@ $30 to his current account. This should be entered as a payment like so:
 
 After this payment is saved, the current balance will indicate that neither Ann nor Bob owes the other anything.
 
-## Archive
-
-By default, all payments are
