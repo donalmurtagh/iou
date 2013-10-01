@@ -469,14 +469,13 @@ public class MainFrame extends JFrame {
         archiveButton.setToolTipText("Archive the payments and expenses");
 
 
-        JLabel summaryLabel = new JLabel();
-        southPanel.add(summaryLabel);
-        summaryLabel.setName("summaryLabel");
-        summaryLabel.setText("Summary:");
-
+        JLabel balanceLabel = new JLabel();
         southPanel.add(balanceLabel);
-        balanceLabel.setName("balanceLabel");
-        balanceLabel.setPreferredSize(new java.awt.Dimension(170, 14));
+        balanceLabel.setText("Balance:");
+
+        southPanel.add(this.balanceLabel);
+        this.balanceLabel.setName("balanceLabel");
+        this.balanceLabel.setPreferredSize(new java.awt.Dimension(170, 14));
 
         JPanel northPanel = new JPanel();
         BorderLayout northPanelLayout = new BorderLayout();
@@ -518,6 +517,7 @@ public class MainFrame extends JFrame {
         editPmtButton.setText("Edit");
         editPmtButton.setToolTipText("Edit the selected payment");
 
+        this.balanceLabel.setForeground(Color.RED);
         LOGGER.debug("Current width is: " + this.getWidth());
 
         GuiUtils.showCentered(this);
