@@ -56,7 +56,7 @@ MySQL login of the other user
 
 ### Run IOU
 
-To run the application, execute the Maven command below (it is assumed that location of `mvn` has been added
+To run the application, execute the Maven command below (which assumes that the location of `mvn` has been added
 to your system's `PATH` variable):
 
 `mvn compile exec:java -Dexec.mainClass=iou.gui.AppLauncher`
