@@ -6,12 +6,12 @@ keeps a record of all transactions and calculates the current balance (shown in 
 ![Expense](docs/screenshot.png)
 
 ## How does it work?
-IOU supports two types of transactions, payments and expenses.
+IOU supports two types of transactions: payments and expenses.
 
 ### Expenses
 Shared expenses should be entered into the table on the right-hand side. It is assumed that all shared expenses should be
 split 50/50. For example, if Ann and Bob have a current balance of $0 (neither owes the other anything), then they
-receive a gas bill for $100, Ann pays $20 and Bob pays $80, the expense should be entered like so:
+receive a gas bill for $100 of which Ann pays $20 and Bob pays $80. This expense should be entered like so:
 
 ![Expense](docs/expense.png)
 
@@ -60,3 +60,5 @@ To run the application, execute the Maven command below (it is assumed that loca
 to your system's `PATH` variable):
 
 `mvn compile exec:java -Dexec.mainClass=iou.gui.AppLauncher`
+
+When the application starts, the selected user should login to IOU with their MySQL password.
