@@ -87,8 +87,6 @@ public class MainFrame extends JFrame {
 
     private void loadData() {
 
-        GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
-
         try {
             // Get all the expenses
             List<Transaction> expenses = controller.getTransactions(TransactionType.EXPENSE);
@@ -110,9 +108,6 @@ public class MainFrame extends JFrame {
 
         } catch (RuntimeException ex) {
             handleFatalException(ex);
-
-        } finally {
-            GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
         }
     }
 
@@ -534,7 +529,6 @@ public class MainFrame extends JFrame {
     private void doArchive() {
 
         try {
-
             int answer = JOptionPane.showConfirmDialog(
                     this,
                     "Are you sure you want to archive all payments and expenses?\n"
@@ -543,7 +537,7 @@ public class MainFrame extends JFrame {
                     JOptionPane.YES_NO_OPTION);
 
             if (answer == JOptionPane.YES_OPTION) {
-
+                GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
                 controller.archiveTransactions(this.netBobBalance);
 
                 // Refresh the list of payments and expenses. At most, a single balancing
@@ -552,6 +546,9 @@ public class MainFrame extends JFrame {
             }
         } catch (RuntimeException ex) {
             handleFatalException(ex);
+
+        } finally {
+            GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
         }
     }
 
