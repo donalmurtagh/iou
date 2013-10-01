@@ -9,7 +9,7 @@ keeps a record of all transactions and calculates the current balance (shown in 
 IOU supports two types of transactions: payments and expenses.
 
 ### Expenses
-Shared expenses should be entered into the table on the right-hand side. It is assumed that all shared expenses should be
+Shared expenses are recorded in the right-hand table. It is assumed that all shared expenses should be
 split 50/50. For example, if Ann and Bob have a current balance of $0 (neither owes the other anything), then they
 receive a gas bill for $100 of which Ann pays $20 and Bob pays $80. This expense should be entered like so:
 
