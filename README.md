@@ -1,14 +1,14 @@
-# What is IOU?
-A desktop application that helps two people keep track of money owed by one to the other. It would typically be
+## What is IOU?
+A free desktop application that helps two people keep track of money owed by one to the other. It would typically be
 useful to a couple, roommates, or any two people that incur shared expenses and/or lend money to each other. IOU
 keeps a record of all transactions and calculates the current balance (shown in red below).
 
 ![Expense](docs/screenshot.png)
 
-# How does it work?
+## How does it work?
 IOU supports two types of transactions, payments and expenses.
 
-## Expenses
+### Expenses
 Shared expenses should be entered into the table on the right-hand side. It is assumed that all shared expenses should be
 split 50/50. For example, if Ann and Bob have a current balance of $0 (neither owes the other anything), then they
 receive a gas bill for $100, Ann pays $20 and Bob pays $80, the expense should be entered like so:
@@ -17,7 +17,7 @@ receive a gas bill for $100, Ann pays $20 and Bob pays $80, the expense should b
 
 After this expense is saved, the current balance will indicate that Ann owes Bob $30.
 
-## Payments
+### Payments
 
 A payment occurs when one party gives money directly to the other. Typically, a payment will either be a loan or repayment
 of an outstanding debt. For example, following the gas bill expense, Ann owes Bob $30. Ann repays this debt by transferring
@@ -27,9 +27,36 @@ $30 to his current account. This should be entered as a payment like so:
 
 After this payment is saved, the current balance will indicate that neither Ann nor Bob owes the other anything.
 
-## Archive
+### Archive
 
 By default all payments and expenses entered since the beginning of time are displayed by IOU. When an archive
 is performed all payments and expenses that were entered prior to the archive are permanently hidden, but the current
 balance is carried forward. In other words, an archive clears the list of payments and expenses shown in IOU without
 affecting the current balance.
+
+## Installation
+
+### Prerequisites
+
+* [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html), version 5 or later
+* [MySQL](http://dev.mysql.com/downloads/mysql/), tested with version 5.5 but any modern version should work
+* [Maven](http://maven.apache.org/download.cgi), tested with version 3.0.3, but any 2.X or 3.X version should work
+
+### Configuration
+
+The steps below only need to be performed once, before you run the application for the first time:
+
+* Create a schema named `iou`. If the MySQL server is not running on the same host as IOU (or you can't name the schema
+`iou`), change the appropriate changes to the `jdbc.url` config parameter in `resources/config.properties`
+* Create two MySQL users that have full read-write access to the `iou` schema
+* In `config.properties` set `ann.username` to the MySQL login of one of the users and set `bob.username` to the
+MySQL login of the other user
+* In the same file, set `ann.name` and `bob.name` to the names that IOU will display for each of these users
+* If $ is not used as the currency symbol in your locale, also set `currency.symbol` to whatever you wish to use instead
+
+### Run IOU
+
+To run the application, execute the Maven command below (it is assumed that location of `mvn` has been added
+to your system's `PATH` variable):
+
+`mvn compile exec:java -Dexec.mainClass=iou.gui.AppLauncher`
