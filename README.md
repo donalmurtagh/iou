@@ -48,7 +48,7 @@ The steps below only need to be performed once, before you run the application f
 
 * Create a schema in MySQL named `iou`. If the MySQL server is not running on the default port (3306) on localhost
 (or you didn't name the schema `iou`), make the appropriate changes to the `jdbc.url` config parameter in `resources/config.properties`
-* Create two MySQL users that have full read-write access to the `iou` schema
+* Create two MySQL users that have read-write access to the `iou` schema
 * In `config.properties` set `ann.username` to the MySQL login of one of the users and set `bob.username` to the
 MySQL login of the other user
 * In the same file, set `ann.name` and `bob.name` to the names that IOU will display for each of these users
