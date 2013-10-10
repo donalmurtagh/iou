@@ -56,9 +56,18 @@ MySQL login of the other user
 
 ### Run IOU
 
-To run the application, execute the Maven command below (which assumes that the location of `mvn` has been added
-to your system's `PATH` variable):
+#### With Maven
+To build and run the application with Maven, execute the command below from the project's root directory:
 
 `mvn compile exec:java -Dexec.mainClass=iou.gui.AppLauncher`
 
-When the application starts, the selected user should login to IOU with their MySQL password.
+When the application starts, the selected user should use their MySQL password to login.
+
+#### Without Maven
+If you wish to run the application on a machine that doesn't have Maven installed, you can build a self-contained JAR file
+by executing the following Maven command from the project's root directory:
+
+`mvn assembly:assembly`
+
+This will create a jar file in the `target` directory named `iou-with-dependencies.jar`. This file can be run on any
+machine that has Java installed via the command `java -jar iou-with-dependencies.jar`.
