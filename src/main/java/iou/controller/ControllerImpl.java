@@ -5,6 +5,7 @@ import iou.model.Payment;
 import iou.model.Transaction;
 
 import java.util.List;
+import java.util.Date;
 
 public class ControllerImpl implements Controller {
 
@@ -43,7 +44,7 @@ public class ControllerImpl implements Controller {
 
             // Carry the balance forward by inserting a new payment for the relevant amount
             Transaction balancingPayment = new Payment();
-            balancingPayment.setDate(new java.util.Date());
+            balancingPayment.setDate(new Date());
             balancingPayment.setDescription("Balance brought forward");
 
             // A positive netBobBalance indicates that Bob owes Ann and vice versa
