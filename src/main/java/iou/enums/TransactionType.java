@@ -13,14 +13,4 @@ public enum TransactionType {
             return "PMT";
         }
     };
-
-    public static TransactionType getType(String type) {
-
-        for (TransactionType aTranType : TransactionType.values()) {
-            if (aTranType.equals(type)) {
-                return aTranType;
-            }
-        }
-        return null;
-    }
 }
