@@ -19,8 +19,6 @@ import java.awt.event.ActionListener;
  */
 public class LoginFrame extends javax.swing.JFrame {
 
-    private static final long serialVersionUID = -3157372084289283925L;
-
     private static final Logger LOGGER = Logger.getLogger(LoginFrame.class);
 
     private JPasswordField passwordField;

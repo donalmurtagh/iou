@@ -6,8 +6,6 @@ import javax.swing.*;
 
 public class TransactionTable extends JTable {
 
-    private static final long serialVersionUID = -5818651467677229726L;
-
     /*
      * (non-Javadoc)
      * 

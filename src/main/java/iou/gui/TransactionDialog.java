@@ -22,7 +22,6 @@ import java.util.Date;
 
 
 public class TransactionDialog extends javax.swing.JDialog {
-    private static final long serialVersionUID = 7474907167576126317L;
 
     private JPanel btnPanel;
 

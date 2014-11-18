@@ -22,8 +22,6 @@ import java.util.Properties;
  */
 public class MainFrame extends JFrame {
 
-    private static final long serialVersionUID = -3027922271769048472L;
-
     private JButton editPmtButton = new JButton();
 
     private JButton archiveButton;

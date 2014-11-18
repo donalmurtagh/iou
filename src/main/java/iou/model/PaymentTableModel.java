@@ -10,8 +10,6 @@ import java.util.List;
 
 public class PaymentTableModel extends TransactionTableModel {
 
-    private static final long serialVersionUID = 4868833031246226851L;
-
     private static final Logger LOGGER = Logger.getLogger(PaymentTableModel.class);
 
     public PaymentTableModel(List<Transaction> records) {

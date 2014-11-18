@@ -9,8 +9,6 @@ import java.util.List;
 
 public class ExpenseTableModel extends TransactionTableModel {
 
-    private static final long serialVersionUID = 883016320327667398L;
-
     private static final Logger LOGGER = Logger.getLogger(ExpenseTableModel.class);
 
     public ExpenseTableModel(List<Transaction> records) {
