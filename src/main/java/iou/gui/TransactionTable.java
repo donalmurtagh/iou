@@ -1,7 +1,7 @@
 package iou.gui;
 
 import iou.enums.Field;
-
+import java.util.Date;
 import javax.swing.*;
 
 public class TransactionTable extends JTable {
@@ -24,7 +24,7 @@ public class TransactionTable extends JTable {
     @Override
     public Class<?> getColumnClass(int col) {
         if (col == Field.DATE_COLUMN_INDEX) {
-            return java.util.Date.class;
+            return Date.class;
         }
 
         return getValueAt(0, col).getClass();

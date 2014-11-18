@@ -21,27 +21,13 @@ import java.text.ParseException;
 import java.util.Date;
 
 
-public class TransactionDialog extends javax.swing.JDialog {
-
-    private JPanel btnPanel;
+public class TransactionDialog extends JDialog {
 
     private JTextField descField;
 
-    private JLabel bobLabel;
-
     private static final float MAX_AMOUNT = 10000;
 
-    private JLabel dateLabel;
-
     private JFormattedTextField dateField;
-
-    private JLabel descLabel;
-
-    private JPanel jPanel2;
-
-    private JButton cancelButton;
-
-    private JButton okButton;
 
     private Transaction tran;
 
@@ -178,11 +164,11 @@ public class TransactionDialog extends javax.swing.JDialog {
 
             setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-            btnPanel = new JPanel();
+            JPanel btnPanel = new JPanel();
             getContentPane().add(btnPanel, BorderLayout.SOUTH);
             btnPanel.setPreferredSize(new java.awt.Dimension(292, 31));
 
-            okButton = new JButton();
+            JButton okButton = new JButton();
             btnPanel.add(okButton);
             okButton.setText("OK");
             okButton.addActionListener(new ActionListener() {
@@ -197,7 +183,7 @@ public class TransactionDialog extends javax.swing.JDialog {
                     }
                 }
             });
-            cancelButton = new JButton();
+            JButton cancelButton = new JButton();
             btnPanel.add(cancelButton);
             cancelButton.setText("Cancel");
             cancelButton.addActionListener(new ActionListener() {
@@ -206,7 +192,7 @@ public class TransactionDialog extends javax.swing.JDialog {
                 }
             });
 
-            jPanel2 = new JPanel();
+            JPanel jPanel2 = new JPanel();
 
             FormLayout jPanel2Layout = new FormLayout(
                     // columns, rows
@@ -216,7 +202,7 @@ public class TransactionDialog extends javax.swing.JDialog {
             jPanel2.setLayout(jPanel2Layout);
             getContentPane().add(jPanel2, BorderLayout.CENTER);
 
-            dateLabel = new JLabel();
+            JLabel dateLabel = new JLabel();
             jPanel2.add(dateLabel, new CellConstraints("2, 2, 1, 1, default, default"));
             dateLabel.setText("Date:");
 
@@ -225,7 +211,7 @@ public class TransactionDialog extends javax.swing.JDialog {
             dateField.setPreferredSize(new java.awt.Dimension(174, 21));
             dateField.setText(DateUtils.date2String(tran.getDate()));
 
-            descLabel = new JLabel();
+            JLabel descLabel = new JLabel();
             jPanel2.add(descLabel, new CellConstraints("2, 4, 1, 1, default, default"));
             descLabel.setText("Description:");
 
@@ -249,7 +235,7 @@ public class TransactionDialog extends javax.swing.JDialog {
                 bobField.setText(String.valueOf(tran.getBobPaid()));
             }
 
-            bobLabel = new JLabel();
+            JLabel bobLabel = new JLabel();
             jPanel2.add(bobLabel, new CellConstraints("2, 8, 1, 1, default, default"));
             bobLabel.setText(User.BOB.getName() + " Paid:");
 
@@ -258,10 +244,8 @@ public class TransactionDialog extends javax.swing.JDialog {
             if (this.mode == TranDialogMode.ADD_PAYMENT
                     || this.mode == TranDialogMode.UPDATE_PAYMENT) {
 
-                annField.getDocument().addDocumentListener(
-                        new PaymentAmountFieldListener(bobField));
-                bobField.getDocument().addDocumentListener(
-                        new PaymentAmountFieldListener(annField));
+                annField.getDocument().addDocumentListener(new PaymentAmountFieldListener(bobField));
+                bobField.getDocument().addDocumentListener(new PaymentAmountFieldListener(annField));
             }
 
             pack();
@@ -286,16 +270,12 @@ public class TransactionDialog extends javax.swing.JDialog {
             this.otherAmountField = otherAmountField;
         }
 
-        public void changedUpdate(DocumentEvent e) {
-            // Empty on purpose
-        }
+        public void changedUpdate(DocumentEvent e) { }
 
         public void insertUpdate(DocumentEvent e) {
             otherAmountField.setText("");
         }
 
-        public void removeUpdate(DocumentEvent e) {
-            // Empty on purpose
-        }
+        public void removeUpdate(DocumentEvent e) { }
     }
 }
