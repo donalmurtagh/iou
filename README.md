@@ -69,5 +69,5 @@ by executing the following Maven command from the project's root directory:
 
 `mvn assembly:assembly`
 
-This will create a jar file in the `target` directory named `iou-with-dependencies.jar`. This file can be run on any
-machine that has Java installed via the command `java -jar iou-with-dependencies.jar`.
+This will create a jar file in the `target` directory named `iou.jar`. This file can be run on any
+machine that has Java installed via the command `java -jar iou.jar`.
