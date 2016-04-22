@@ -71,7 +71,7 @@ public class MainFrame extends JFrame {
             Properties messages = new Properties();
             messages.load(getClass().getResourceAsStream("/config.properties"));
             String currencySymbol = messages.getProperty("currency.symbol");
-            currencyFormatter = new DecimalFormat(currencySymbol + "#.##");
+            currencyFormatter = new DecimalFormat(currencySymbol + "#.00");
 
             loadData();
 
@@ -211,6 +211,8 @@ public class MainFrame extends JFrame {
         } else {
             balanceLabel.setText("Nothing owed");
         }
+
+        balanceLabel.setToolTipText(balanceLabel.getText());
     }
 
     private String formatDecimal(Float decimal) {
@@ -473,7 +475,7 @@ public class MainFrame extends JFrame {
 
         southPanel.add(this.balanceLabel);
         this.balanceLabel.setName("balanceLabel");
-        this.balanceLabel.setPreferredSize(new java.awt.Dimension(170, 14));
+        this.balanceLabel.setPreferredSize(new java.awt.Dimension(370, 14));
 
         JPanel northPanel = new JPanel();
         BorderLayout northPanelLayout = new BorderLayout();
