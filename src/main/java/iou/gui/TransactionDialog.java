@@ -154,9 +154,8 @@ public class TransactionDialog extends JDialog {
 
     private void initGUI() {
         try {
-            this.setResizable(false);
-            BorderLayout thisLayout = new BorderLayout();
-            getContentPane().setLayout(thisLayout);
+            this.setResizable(true);
+            getContentPane().setLayout(new BorderLayout());
 
             // Create a border so the OK and Cancel buttons don't sit right on
             // the bottom of the window
@@ -164,12 +163,12 @@ public class TransactionDialog extends JDialog {
 
             setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-            JPanel btnPanel = new JPanel();
-            getContentPane().add(btnPanel, BorderLayout.SOUTH);
-            btnPanel.setPreferredSize(new java.awt.Dimension(292, 31));
+            JPanel buttonPanel = new JPanel();
+            getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+            buttonPanel.setPreferredSize(new java.awt.Dimension(292, 31));
 
             JButton okButton = new JButton();
-            btnPanel.add(okButton);
+            buttonPanel.add(okButton);
             okButton.setText("OK");
             okButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -184,7 +183,7 @@ public class TransactionDialog extends JDialog {
                 }
             });
             JButton cancelButton = new JButton();
-            btnPanel.add(cancelButton);
+            buttonPanel.add(cancelButton);
             cancelButton.setText("Cancel");
             cancelButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -192,68 +191,72 @@ public class TransactionDialog extends JDialog {
                 }
             });
 
-            JPanel jPanel2 = new JPanel();
+            JPanel formPanel = new JPanel();
 
-            FormLayout jPanel2Layout = new FormLayout(
+            FormLayout formLayout = new FormLayout(
                     // columns, rows
                     "max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu)",
                     "max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu)");
 
-            jPanel2.setLayout(jPanel2Layout);
-            getContentPane().add(jPanel2, BorderLayout.CENTER);
+            formPanel.setLayout(formLayout);
+            getContentPane().add(formPanel, BorderLayout.CENTER);
 
             JLabel dateLabel = new JLabel();
-            jPanel2.add(dateLabel, new CellConstraints("2, 2, 1, 1, default, default"));
+            formPanel.add(dateLabel, new CellConstraints("2, 2, 1, 1, default, default"));
             dateLabel.setText("Date:");
 
-            jPanel2.add(dateField, new CellConstraints("4, 2, 1, 1, default, default"));
+            formPanel.add(dateField, new CellConstraints("4, 2, 1, 1, default, default"));
             dateField.setName("dateField");
             dateField.setPreferredSize(new java.awt.Dimension(174, 21));
             dateField.setText(DateUtils.date2String(tran.getDate()));
 
             JLabel descLabel = new JLabel();
-            jPanel2.add(descLabel, new CellConstraints("2, 4, 1, 1, default, default"));
+            formPanel.add(descLabel, new CellConstraints("2, 4, 1, 1, default, default"));
             descLabel.setText("Description:");
 
             descField = new JTextField();
-            jPanel2.add(descField, new CellConstraints("4, 4, 1, 1, default, default"));
+            formPanel.add(descField, new CellConstraints("4, 4, 1, 1, default, default"));
             descField.setText(tran.getDescription());
 
-            JLabel annLabel = new JLabel();
-            jPanel2.add(annLabel, new CellConstraints("2, 6, 1, 1, default, default"));
-            annLabel.setText(User.ANN.getName() + " Paid:");
+            formPanel.add(createPersonLabel(User.ANN.getName() + " Paid:"), new CellConstraints("2, 6, 1, 1, default, default"));
 
-            jPanel2.add(annField, new CellConstraints("4, 6, 1, 1, default, default"));
+            formPanel.add(annField, new CellConstraints("4, 6, 1, 1, default, default"));
             annField.setName("annField");
             if (tran.getAnnPaid() != 0) {
                 annField.setText(String.valueOf(tran.getAnnPaid()));
             }
 
-            jPanel2.add(bobField, new CellConstraints("4, 8, 1, 1, default, default"));
+            formPanel.add(bobField, new CellConstraints("4, 8, 1, 1, default, default"));
             bobField.setName("bobField");
             if (tran.getBobPaid() != 0) {
                 bobField.setText(String.valueOf(tran.getBobPaid()));
             }
 
-            JLabel bobLabel = new JLabel();
-            jPanel2.add(bobLabel, new CellConstraints("2, 8, 1, 1, default, default"));
-            bobLabel.setText(User.BOB.getName() + " Paid:");
+            formPanel.add(createPersonLabel(User.BOB.getName() + " Paid:"), new CellConstraints("2, 8, 1, 1, default, default"));
 
             // Add listeners to ensure that text can only be entered in one of the amount
             // fields when adding or updating a payment
-            if (this.mode == TranDialogMode.ADD_PAYMENT
-                    || this.mode == TranDialogMode.UPDATE_PAYMENT) {
+            if (this.mode == TranDialogMode.ADD_PAYMENT || this.mode == TranDialogMode.UPDATE_PAYMENT) {
 
                 annField.getDocument().addDocumentListener(new PaymentAmountFieldListener(bobField));
                 bobField.getDocument().addDocumentListener(new PaymentAmountFieldListener(annField));
             }
 
             pack();
-            this.setSize(300, 214);
+            this.setSize(450, 214);
             Application.getInstance().getContext().getResourceMap(getClass()).injectComponents(getContentPane());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error initializing dialog", e);
         }
+    }
+
+    private JLabel createPersonLabel(String text) {
+
+        JLabel personLabel = new JLabel();
+        personLabel.setText(text);
+        personLabel.setMaximumSize(new Dimension(200, 16));
+        personLabel.setToolTipText(text);
+        return personLabel;
     }
 
     /**
