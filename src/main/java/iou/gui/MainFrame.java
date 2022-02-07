@@ -559,8 +559,5 @@ public class MainFrame extends JFrame {
                 "An unexpected error occurred.\nThe application will be shut down.\n"
                         + "Please consult the logs for further information.", "Fatal Error",
                 JOptionPane.ERROR_MESSAGE);
-
-        // Shut down the application to prevent any (further) data corruption
-        System.exit(1);
     }
 }
