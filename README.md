@@ -1,5 +1,5 @@
 ## What is IOU?
-A free desktop application that helps two people keep track of money owed by one to the other. It would typically be
+A desktop application that helps two people keep track of money owed to each other. It would typically be
 useful to a couple, roommates, or any two people that incur shared expenses and/or lend money to each other. IOU
 keeps a record of all transactions and calculates the current balance (shown in red below).
 
