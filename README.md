@@ -21,7 +21,7 @@ After this expense is saved, the current balance will indicate that Ann owes Bob
 
 A payment occurs when one party gives money directly to the other. Typically, a payment will either be a loan or repayment
 of an outstanding debt. For example, following payment of the gas bill mentioned above, Ann owes Bob $30. Ann repays this
-debt by transferring $30 to his bank account. This should be entered as a payment like so:
+debt by giving Bob $30. This should be entered as a payment like so:
 
 ![Payment](docs/payment.png)
 
