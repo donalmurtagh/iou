@@ -59,6 +59,7 @@ public class LoginFrame extends javax.swing.JFrame {
                 applicationContext.getBean("mainFrame");
 
             } catch (Exception ex) {
+                LOGGER.error("Login failed for user: " + username, ex);
                 JOptionPane.showMessageDialog(this, """
                         Login failed. Likely causes:
                         - Password typed incorrectly
