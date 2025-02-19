@@ -1,20 +1,25 @@
 package iou.util;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
-import javax.swing.*;
+import javax.swing.JTable;
 import javax.swing.table.TableColumn;
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Window;
 
 public final class GuiUtils {
 
-    private static final Logger LOGGER = Logger.getLogger(GuiUtils.class);
+    private static final Logger LOGGER = LogManager.getLogger(GuiUtils.class);
 
     private static Image applicationImage;
 
     private GuiUtils() {
     }
-
 
     /**
      * Load the application image into the top-left corner of a frame
@@ -31,7 +36,7 @@ public final class GuiUtils {
 
     public static void setTableColumnWidth(JTable table, int columnIndex, int width) {
 
-        LOGGER.debug("Table has " + table.getColumnCount() + " columns");
+        LOGGER.debug("Table has {} columns", table.getColumnCount());
 
         TableColumn column = table.getColumnModel().getColumn(columnIndex);
         column.setPreferredWidth(width);
@@ -50,7 +55,7 @@ public final class GuiUtils {
         // Select the last row if there are rows
         if (rowCount != 0) {
 
-            LOGGER.debug("Selecting last row of: " + table.getRowCount());
+            LOGGER.debug("Selecting last row of: {}", table.getRowCount());
             table.setRowSelectionInterval(rowCount - 1, rowCount - 1);
         }
     }

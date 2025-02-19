@@ -7,16 +7,25 @@ import iou.enums.User;
 import iou.model.Transaction;
 import iou.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jdesktop.application.Application;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.MaskFormatter;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -29,18 +38,18 @@ public class TransactionDialog extends JDialog {
 
     private JFormattedTextField dateField;
 
-    private Transaction tran;
+    private final Transaction tran;
 
     // TODO Add decimal masks to these fields
-    private JTextField bobField = new JTextField();
+    private final JTextField bobField = new JTextField();
 
-    private JTextField annField = new JTextField();
+    private final JTextField annField = new JTextField();
 
     private boolean isValidTransaction = false;
 
-    private TranDialogMode mode;
+    private final TranDialogMode mode;
 
-    private static final Logger LOGGER = Logger.getLogger(TransactionDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(TransactionDialog.class);
 
     /**
      * Shows this dialog in modal mode
@@ -52,13 +61,11 @@ public class TransactionDialog extends JDialog {
     public TransactionDialog(Frame owner, TranDialogMode mode, Transaction tran) {
         super(owner, mode.getTitle(), true);
 
-
         try {
             // TODO This mask will accept something like '44/13/07' which is not a valid date
             dateField = new JFormattedTextField(new MaskFormatter("##/##/##"));
 
         } catch (ParseException e) {
-
             // If there's a problem masking the input fields just carry on because the
             // input will be validated when "OK" is pressed
             LOGGER.warn("Error masking input field", e);
@@ -95,8 +102,7 @@ public class TransactionDialog extends JDialog {
     private boolean updateTransaction() {
 
         // Check that at least one amount has been provided
-        if (StringUtils.isBlank(annField.getText())
-                && StringUtils.isBlank(bobField.getText())) {
+        if (StringUtils.isBlank(annField.getText()) && StringUtils.isBlank(bobField.getText())) {
 
             String missingPayeeMsg = String.format("Please enter an amount in either '%s Paid' or '%s Paid'",
                     User.ANN.getName(),
@@ -106,11 +112,10 @@ public class TransactionDialog extends JDialog {
         }
 
         try {
-
             if (StringUtils.isNotBlank(dateField.getText())) {
-                LOGGER.debug("Date field contains text: " + dateField.getText());
+                LOGGER.debug("Date field contains text: {}", dateField.getText());
                 Date parsedDate = DateUtils.string2Date(dateField.getText());
-                LOGGER.debug("Parsed date is: " + parsedDate);
+                LOGGER.debug("Parsed date is: {}", parsedDate);
 
                 tran.setDate(DateUtils.string2Date(dateField.getText()));
             }
@@ -170,26 +175,18 @@ public class TransactionDialog extends JDialog {
             JButton okButton = new JButton();
             buttonPanel.add(okButton);
             okButton.setText("OK");
-            okButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
+            okButton.addActionListener(e -> {
 
-                    // If the transaction is valid set the status and close
-                    // the
-                    // window. If it's not valid a message box should pop up
-                    // and the user will be able to fix the problem
-                    if (updateTransaction()) {
-                        close(true);
-                    }
+                // If the transaction is valid set the status and close the window. If it's not valid a message box
+                // should pop up and the user will be able to fix the problem
+                if (updateTransaction()) {
+                    close(true);
                 }
             });
             JButton cancelButton = new JButton();
             buttonPanel.add(cancelButton);
             cancelButton.setText("Cancel");
-            cancelButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    close(false);
-                }
-            });
+            cancelButton.addActionListener(e -> close(false));
 
             JPanel formPanel = new JPanel();
 
@@ -267,18 +264,21 @@ public class TransactionDialog extends JDialog {
      */
     private static class PaymentAmountFieldListener implements DocumentListener {
 
-        private JTextField otherAmountField;
+        private final JTextField otherAmountField;
 
         private PaymentAmountFieldListener(JTextField otherAmountField) {
             this.otherAmountField = otherAmountField;
         }
 
+        @Override
         public void changedUpdate(DocumentEvent e) { }
 
+        @Override
         public void insertUpdate(DocumentEvent e) {
             otherAmountField.setText("");
         }
 
+        @Override
         public void removeUpdate(DocumentEvent e) { }
     }
 }

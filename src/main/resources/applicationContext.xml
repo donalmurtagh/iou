@@ -23,15 +23,12 @@
 
     <tx:advice id="txAdvice" transaction-manager="txManager">
         <tx:attributes>
-            <tx:method name="*" read-only="false"/>
+            <tx:method name="*" />
         </tx:attributes>
     </tx:advice>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-
-        <property name="location">
-            <value>config.properties</value>
-        </property>
+        <property name="location" value="config.properties"/>
     </bean>
 
     <bean id="transactionDao" class="iou.controller.JdbcTransactionDaoImpl">

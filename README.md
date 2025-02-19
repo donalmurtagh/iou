@@ -29,7 +29,7 @@ After this payment is saved, the current balance will indicate that neither Ann 
 
 ### Archive
 
-By default all payments and expenses entered since the beginning of time are displayed by IOU. When an archive
+By default, all payments and expenses entered since the beginning of time are displayed by IOU. When an archive
 is performed all payments and expenses that were entered prior to the archive are permanently hidden, but the current
 balance is carried forward. In other words, an archive clears the list of payments and expenses shown in IOU without
 affecting the current balance.
@@ -37,22 +37,62 @@ affecting the current balance.
 ## Installation
 
 ### Prerequisites
+If using macOS or Linux it is recommended to use either [Homebrew](https://brew.sh/) or [SDKMAN](https://sdkman.io/) 
+to install the following dependencies.
 
-* [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html), version 5 or later
-* [MySQL](http://dev.mysql.com/downloads/mysql/), tested with version 5.5 but any modern version should work
-* [Maven](http://maven.apache.org/download.cgi), tested with version 3.0.3, but any 2.X or 3.X version should work
+* Java Development Kit (JDK), version 17 and above
+* MySQL, version 8 and above
+* Maven, version 3
 
 ### Configuration
 
 The steps below only need to be performed once, before you run the application for the first time:
 
-* Create a schema in MySQL named `iou`. If the MySQL server is not running on the default port (3306) on localhost
-(or you didn't name the schema `iou`), make the appropriate changes to the `jdbc.url` config parameter in `resources/config.properties`
-* Create two MySQL users that have read-write access to the `iou` schema
+* Create a MySQL database named `iou`. If the MySQL server is not running on the default port (3306) on localhost
+(or you didn't name the database `iou`), make the appropriate changes to the `jdbc.url` config parameter in `resources/config.properties`
+* Create the database table and triggers via the SQL script `src/main/resources/schema.sql`
+* Create two MySQL users that have read-write access to the `iou` database
 * In `config.properties` set `ann.username` to the MySQL login of one of the users and set `bob.username` to the
 MySQL login of the other user
 * In the same file, set `ann.name` and `bob.name` to the names that IOU will display for each of these users
-* If $ is not used as the currency symbol in your locale, also set `currency.symbol` to whatever you wish to use instead
+* If $ is not used as the currency symbol in your locale, also set `currency.symbol` to whatever you wish to use instead 
+
+#### Database Initialization Example
+
+Assuming the following:
+* We are using the default database name "iou"
+* We are using the default names for both MySQL users ("ann" and "bob")
+* Both database users are using the password "secret"
+* The current directory is set to the root of this project
+
+The database initialization steps described in the previous section can be performed
+by logging into MySQL as the root user and executing the following commands
+
+```
+mysql> create database iou;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use iou;
+Database changed
+mysql> source src/main/resources/schema.sql
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> create user ann@localhost identified by 'secret';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> grant all on iou.* to ann@localhost;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create user bob@localhost identified by 'secret';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> grant all on iou.* to bob@localhost;
+Query OK, 0 rows affected (0.01 sec)
+```
 
 ### Run IOU
 

@@ -7,19 +7,21 @@ public enum ExpenseField implements Field {
     ANN_PAID(User.ANN.getName() + " Paid", 2),
     BOB_PAID(User.BOB.getName() + " Paid", 3);
 
-    private String name;
+    private final String name;
 
-    private int index;
+    private final int index;
 
-    private ExpenseField(String name, int position) {
+    ExpenseField(String name, int position) {
         this.name = name;
         this.index = position;
     }
 
+    @Override
     public int getIndex() {
         return index;
     }
 
+    @Override
     public String getName() {
         return name;
     }

@@ -2,14 +2,15 @@ package iou.model;
 
 import iou.enums.ExpenseField;
 import iou.util.DateUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.text.ParseException;
 import java.util.List;
 
 public class ExpenseTableModel extends TransactionTableModel {
 
-    private static final Logger LOGGER = Logger.getLogger(ExpenseTableModel.class);
+    private static final Logger LOGGER = LogManager.getLogger(ExpenseTableModel.class);
 
     public ExpenseTableModel(List<Transaction> records) {
         super(records);
@@ -21,6 +22,7 @@ public class ExpenseTableModel extends TransactionTableModel {
      *
      * @return The number of table columns
      */
+    @Override
     public int getColumnCount() {
         return ExpenseField.values().length;
     }
@@ -42,7 +44,7 @@ public class ExpenseTableModel extends TransactionTableModel {
             try {
                 expense.setDate(DateUtils.string2Date(fieldValue));
             } catch (ParseException e) {
-                LOGGER.error("Error parsing date value: " + fieldValue);
+                LOGGER.error("Error parsing date value: {}", fieldValue);
                 // TODO: Do something a bit smarter
                 throw new IllegalArgumentException(e);
             }
@@ -50,10 +52,10 @@ public class ExpenseTableModel extends TransactionTableModel {
             expense.setDescription(fieldValue);
 
         } else if (column == ExpenseField.ANN_PAID.getIndex()) {
-            expense.setAnnPaid(new Float(fieldValue));
+            expense.setAnnPaid(Float.parseFloat(fieldValue));
 
         } else if (column == ExpenseField.BOB_PAID.getIndex()) {
-            expense.setBobPaid(new Float(fieldValue));
+            expense.setBobPaid(Float.parseFloat(fieldValue));
 
         } else {
             throw new IllegalArgumentException("Invalid column index: " + column);
@@ -70,6 +72,7 @@ public class ExpenseTableModel extends TransactionTableModel {
      *         will the result of calling <code>toString</code> on this
      *         object.
      */
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Expense expense = (Expense) txnRecords.get(rowIndex);
 

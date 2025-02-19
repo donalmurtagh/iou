@@ -3,14 +3,15 @@ package iou.model;
 import iou.enums.PaymentField;
 import iou.enums.User;
 import iou.util.DateUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.text.ParseException;
 import java.util.List;
 
 public class PaymentTableModel extends TransactionTableModel {
 
-    private static final Logger LOGGER = Logger.getLogger(PaymentTableModel.class);
+    private static final Logger LOGGER = LogManager.getLogger(PaymentTableModel.class);
 
     public PaymentTableModel(List<Transaction> records) {
         super(records);
@@ -22,6 +23,7 @@ public class PaymentTableModel extends TransactionTableModel {
      *
      * @return The number of table columns
      */
+    @Override
     public int getColumnCount() {
         return PaymentField.values().length;
     }
@@ -43,7 +45,7 @@ public class PaymentTableModel extends TransactionTableModel {
             try {
                 payment.setDate(DateUtils.string2Date(fieldValue));
             } catch (ParseException e) {
-                LOGGER.error("Error parsing date value: " + fieldValue);
+                LOGGER.error("Error parsing date value: {}", fieldValue);
                 // TODO: Do something a bit smarter
                 throw new IllegalArgumentException(e);
             }
@@ -53,10 +55,10 @@ public class PaymentTableModel extends TransactionTableModel {
         } else if (column == PaymentField.PAID_BY.getIndex()) {
 
             if (aValue.toString().equals(User.ANN)) {
-                payment.setAnnPaid(new Float(fieldValue));
+                payment.setAnnPaid(Float.parseFloat(fieldValue));
 
             } else if (aValue.toString().equals(User.BOB)) {
-                payment.setBobPaid(new Float(fieldValue));
+                payment.setBobPaid(Float.parseFloat(fieldValue));
 
             } else {
                 throw new IllegalArgumentException("Unrecognised user: " + aValue);
@@ -76,6 +78,7 @@ public class PaymentTableModel extends TransactionTableModel {
      *         will the result of calling <code>toString</code> on this
      *         object.
      */
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Payment payment = (Payment) txnRecords.get(rowIndex);
 
@@ -87,7 +90,6 @@ public class PaymentTableModel extends TransactionTableModel {
 
         } else if (columnIndex == PaymentField.PAID_BY.getIndex()) {
 
-            //LOGGER.debug("Getting payee for payment: " + payment);
             if (payment.getBobPaid() != 0) {
                 return User.BOB;
 
