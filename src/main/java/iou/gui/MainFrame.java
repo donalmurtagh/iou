@@ -1,15 +1,36 @@
 package iou.gui;
 
 import iou.controller.Controller;
-import iou.enums.*;
-import iou.model.*;
+import iou.enums.ExpenseField;
+import iou.enums.PaymentField;
+import iou.enums.TranDialogMode;
+import iou.enums.TransactionType;
+import iou.enums.User;
+import iou.model.Expense;
+import iou.model.ExpenseTableModel;
+import iou.model.Payment;
+import iou.model.PaymentTableModel;
+import iou.model.Transaction;
+import iou.model.TransactionTableModel;
 import iou.util.GuiUtils;
 import org.apache.log4j.Logger;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.WindowConstants;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
@@ -22,25 +43,25 @@ import java.util.Properties;
  */
 public class MainFrame extends JFrame {
 
-    private JButton editPmtButton = new JButton();
+    private final JButton editPmtButton = new JButton();
 
     private JButton archiveButton;
 
-    private JLabel balanceLabel = new JLabel();
+    private final JLabel balanceLabel = new JLabel();
 
-    private JButton addExpButton = new JButton();
+    private final JButton addExpButton = new JButton();
 
-    private JButton deleteExpButton = new JButton();
+    private final JButton deleteExpButton = new JButton();
 
-    private JButton deletePmtButton = new JButton();
+    private final JButton deletePmtButton = new JButton();
 
-    private JTable expensesTable = new TransactionTable();
+    private final JTable expensesTable = new TransactionTable();
 
-    private JTable paymentsTable = new TransactionTable();
+    private final JTable paymentsTable = new TransactionTable();
 
-    private JButton editExpButton = new JButton();
+    private final JButton editExpButton = new JButton();
 
-    private JButton addPmtButton = new JButton();
+    private final JButton addPmtButton = new JButton();
 
     private TransactionTableModel expensesTableModel;
 
@@ -62,7 +83,6 @@ public class MainFrame extends JFrame {
     private static final Logger LOGGER = Logger.getLogger(MainFrame.class);
 
     public MainFrame(Controller controller) {
-
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
         this.controller = controller;
         initUI();
@@ -84,7 +104,6 @@ public class MainFrame extends JFrame {
     }
 
     private void loadData() {
-
         try {
             // Get all the expenses
             List<Transaction> expenses = controller.getTransactions(TransactionType.EXPENSE);
@@ -154,7 +173,6 @@ public class MainFrame extends JFrame {
      * @param deleteButton
      */
     private static void updateTableAndButtonsUI(JTable table, JButton editButton, JButton deleteButton) {
-
         table.updateUI();
         boolean rowsExist = (table.getModel().getRowCount() > 0);
         deleteButton.setEnabled(rowsExist);
@@ -168,7 +186,6 @@ public class MainFrame extends JFrame {
      * @param updateType Indicates which set of transactions has changed
      */
     private void updateUI(TableUpdateType updateType) {
-
         // Unless only the payments have changed, update the expenses table
         if (updateType != TableUpdateType.PAYMENT) {
             updateTableAndButtonsUI(expensesTable, editExpButton, deleteExpButton);
@@ -247,7 +264,6 @@ public class MainFrame extends JFrame {
      * Open the update expense dialog
      */
     private void showUpdateExpenseDialog() {
-
         // Get the selected expense from the table model
         int selectedRowIndex = expensesTable.getSelectedRow();
         Transaction selectedExpense = expensesTableModel.getTransaction(selectedRowIndex);
@@ -262,7 +278,6 @@ public class MainFrame extends JFrame {
     }
 
     private void showDeletePaymentDialog() {
-
         int selectedRow = paymentsTable.getSelectedRow();
         Transaction selectedTran = paymentsTableModel.getTransaction(selectedRow);
 
@@ -276,7 +291,6 @@ public class MainFrame extends JFrame {
     }
 
     private void persistDeletedTransaction(Transaction tran) {
-
         LOGGER.debug("Deleting transaction: " + tran);
 
         try {
@@ -299,7 +313,6 @@ public class MainFrame extends JFrame {
     }
 
     private void showDeleteExpenseDialog() {
-
         int selectedRow = expensesTable.getSelectedRow();
         Transaction selectedTran = expensesTableModel.getTransaction(selectedRow);
 
@@ -319,7 +332,6 @@ public class MainFrame extends JFrame {
      * @param tran          The updated transaction
      */
     private void persistUpdatedTransaction(int tableRowIndex, Transaction tran) {
-
         LOGGER.debug("Updated transaction passed validation: " + tran);
 
         try {
@@ -345,7 +357,6 @@ public class MainFrame extends JFrame {
      * Add the transaction to the DB and the JTable
      */
     private void persistNewTransaction(Transaction tran) {
-
         LOGGER.debug("New transaction passed validation: " + tran);
 
         try {
@@ -364,7 +375,6 @@ public class MainFrame extends JFrame {
     }
 
     private void initUI() {
-
         setSize(1050, 420);
         GuiUtils.loadApplicationImage(this);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -398,28 +408,16 @@ public class MainFrame extends JFrame {
 
         westPanel.add(addPmtButton);
         addPmtButton.setName("addPmtButton");
-        addPmtButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                showAddPaymentDialog();
-            }
-        });
+        addPmtButton.addActionListener(arg0 -> showAddPaymentDialog());
 
         westPanel.add(deletePmtButton);
         deletePmtButton.setName("deletePmtButton");
-        deletePmtButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                showDeletePaymentDialog();
-            }
-        });
+        deletePmtButton.addActionListener(arg0 -> showDeletePaymentDialog());
 
         westPanel.add(editPmtButton);
         editPmtButton.setName("editPmtButton");
 
-        editPmtButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                showUpdatePaymentDialog();
-            }
-        });
+        editPmtButton.addActionListener(arg0 -> showUpdatePaymentDialog());
 
         JPanel eastPanel = new JPanel();
         BoxLayout eastPanelLayout = new BoxLayout(eastPanel, BoxLayout.Y_AXIS);
@@ -430,28 +428,15 @@ public class MainFrame extends JFrame {
 
         eastPanel.add(addExpButton);
         addExpButton.setName("addExpButton");
-        addExpButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                showAddExpenseDialog();
-
-            }
-        });
+        addExpButton.addActionListener(evt -> showAddExpenseDialog());
 
         eastPanel.add(deleteExpButton);
         deleteExpButton.setName("deleteExpButton");
-        deleteExpButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                showDeleteExpenseDialog();
-            }
-        });
+        deleteExpButton.addActionListener(evt -> showDeleteExpenseDialog());
 
         eastPanel.add(editExpButton);
         editExpButton.setName("editExpButton");
-        editExpButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                showUpdateExpenseDialog();
-            }
-        });
+        editExpButton.addActionListener(evt -> showUpdateExpenseDialog());
 
         JPanel southPanel = new JPanel();
         getContentPane().add(southPanel, BorderLayout.SOUTH);
@@ -460,14 +445,9 @@ public class MainFrame extends JFrame {
         archiveButton = new JButton();
         southPanel.add(archiveButton);
         archiveButton.setName("archiveButton");
-        archiveButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                doArchive();
-            }
-        });
+        archiveButton.addActionListener(evt -> doArchive());
         archiveButton.setText("Archive");
         archiveButton.setToolTipText("Archive the payments and expenses");
-
 
         JLabel balanceLabel = new JLabel();
         southPanel.add(balanceLabel);
@@ -527,14 +507,11 @@ public class MainFrame extends JFrame {
      * Archive the current transactions
      */
     private void doArchive() {
-
         try {
-            int answer = JOptionPane.showConfirmDialog(
-                    this,
-                    "Are you sure you want to archive all payments and expenses?\n"
-                            + "This will cause all currently displayed payments and expenses to be replaced "
-                            + "by a single balancing payment.", "Confirm Archive",
-                    JOptionPane.YES_NO_OPTION);
+            int answer = JOptionPane.showConfirmDialog(this, """                    
+                    Are you sure you want to archive all payments and expenses?
+                    This will cause all currently displayed payments and expenses to be replaced by a single balancing payment.""",
+                "Confirm Archive", JOptionPane.YES_NO_OPTION);
 
             if (answer == JOptionPane.YES_OPTION) {
                 GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
@@ -553,7 +530,6 @@ public class MainFrame extends JFrame {
     }
 
     private void handleFatalException(Exception ex) {
-
         LOGGER.fatal("Fatal error occurred", ex);
         JOptionPane.showMessageDialog(this,
                 "An unexpected error occurred.\nPlease consult the logs for further information.", "Fatal Error",

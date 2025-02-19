@@ -4,8 +4,8 @@ import iou.enums.TransactionType;
 import iou.model.Payment;
 import iou.model.Transaction;
 
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 public class ControllerImpl implements Controller {
 

@@ -1,14 +1,15 @@
 package iou.gui;
 
 import iou.enums.Field;
+
+import javax.swing.JTable;
 import java.util.Date;
-import javax.swing.*;
 
 public class TransactionTable extends JTable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.swing.JTable#isCellEditable(int, int)
      */
     @Override
@@ -18,7 +19,7 @@ public class TransactionTable extends JTable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.swing.JTable#getColumnClass(int)
      */
     @Override

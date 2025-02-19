@@ -3,7 +3,6 @@ package iou.controller;
 import iou.enums.TransactionType;
 import iou.model.Transaction;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 public interface TransactionDao {

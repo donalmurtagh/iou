@@ -1,11 +1,11 @@
 package iou.util;
 
+import org.apache.log4j.Logger;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.apache.log4j.Logger;
 
 public final class DateUtils {
 
@@ -28,8 +28,7 @@ public final class DateUtils {
         return date;
     }
 
-    public static String date2String(Date date) throws ParseException {
+    public static String date2String(Date date) {
         return dateFormatter.format(date);
     }
-
 }

@@ -9,10 +9,17 @@ import org.jdesktop.application.Application;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
 
 /**
  * The login dialog box
@@ -42,7 +49,7 @@ public class LoginFrame extends javax.swing.JFrame {
             dataSource.setUsername(username);
             dataSource.setPassword(password);
 
-            LOGGER.debug("Attemping to login with username: " + username);
+            LOGGER.debug("Attempting to login with username: " + username);
 
             try {
                 controller.login(username, password);
@@ -52,8 +59,11 @@ public class LoginFrame extends javax.swing.JFrame {
                 applicationContext.getBean("mainFrame");
 
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Login failed. Likely causes:\n"
-                        + "- Password typed incorrectly\n" + "- Database is not running",
+                JOptionPane.showMessageDialog(this, """
+                        Login failed. Likely causes:
+                        - Password typed incorrectly
+                        - MySQL is not running
+                        - Database is not initialized""",
                         "Login Error", JOptionPane.ERROR_MESSAGE);
             }
         } finally {
@@ -66,14 +76,10 @@ public class LoginFrame extends javax.swing.JFrame {
      * Auto-generated main method to display this JFrame
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                LoginFrame inst = new LoginFrame();
-                inst.setLocationRelativeTo(null);
-                inst.setVisible(true);
-            }
+        SwingUtilities.invokeLater(() -> {
+            LoginFrame inst = new LoginFrame();
+            inst.setLocationRelativeTo(null);
+            inst.setVisible(true);
         });
     }
 
@@ -92,11 +98,7 @@ public class LoginFrame extends javax.swing.JFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(392, 44));
 
         JButton loginButton = new JButton();
-        loginButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                doLogin();
-            }
-        });
+        loginButton.addActionListener(e -> doLogin());
 
         jPanel3.add(loginButton);
         loginButton.setText("Login");
@@ -108,11 +110,7 @@ public class LoginFrame extends javax.swing.JFrame {
         jPanel3.add(cancelButton);
         cancelButton.setText("Cancel");
 
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        cancelButton.addActionListener(e -> System.exit(0));
 
         JPanel jPanel1 = new JPanel();
         getContentPane().add(jPanel1, BorderLayout.NORTH);

@@ -2,9 +2,14 @@ package iou.util;
 
 import org.apache.log4j.Logger;
 
-import javax.swing.*;
+import javax.swing.JTable;
 import javax.swing.table.TableColumn;
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Window;
 
 public final class GuiUtils {
 
@@ -14,7 +19,6 @@ public final class GuiUtils {
 
     private GuiUtils() {
     }
-
 
     /**
      * Load the application image into the top-left corner of a frame

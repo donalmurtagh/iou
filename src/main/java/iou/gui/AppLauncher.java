@@ -4,22 +4,16 @@ import iou.util.GuiUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import java.awt.*;
-import java.io.FileNotFoundException;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class AppLauncher {
 
     private static final Logger LOGGER = Logger.getLogger(AppLauncher.class);
 
-    /**
-     * @param args
-     * @throws java.io.FileNotFoundException
-     * @throws java.net.MalformedURLException
-     */
-    public static void main(String[] args) throws FileNotFoundException, MalformedURLException {
+    public static void main(String[] args) {
 
         InputStream log4jConfig = AppLauncher.class.getResourceAsStream("/log4j.properties");
         PropertyConfigurator.configure(log4jConfig);
