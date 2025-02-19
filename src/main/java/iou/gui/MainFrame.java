@@ -556,8 +556,7 @@ public class MainFrame extends JFrame {
 
         LOGGER.fatal("Fatal error occurred", ex);
         JOptionPane.showMessageDialog(this,
-                "An unexpected error occurred.\nThe application will be shut down.\n"
-                        + "Please consult the logs for further information.", "Fatal Error",
+                "An unexpected error occurred.\nPlease consult the logs for further information.", "Fatal Error",
                 JOptionPane.ERROR_MESSAGE);
     }
 }
