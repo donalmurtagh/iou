@@ -70,28 +70,12 @@ by logging into MySQL as the root user and executing the following commands
 
 ```
 mysql> create database iou;
-Query OK, 1 row affected (0.00 sec)
-
 mysql> use iou;
-Database changed
 mysql> source src/main/resources/schema.sql
-Query OK, 0 rows affected, 1 warning (0.01 sec)
-
-Query OK, 0 rows affected (0.01 sec)
-
-Query OK, 0 rows affected (0.00 sec)
-
 mysql> create user ann@localhost identified by 'secret';
-Query OK, 0 rows affected (0.01 sec)
-
 mysql> grant all on iou.* to ann@localhost;
-Query OK, 0 rows affected (0.01 sec)
-
 mysql> create user bob@localhost identified by 'secret';
-Query OK, 0 rows affected (0.00 sec)
-
 mysql> grant all on iou.* to bob@localhost;
-Query OK, 0 rows affected (0.01 sec)
 ```
 
 ### Run IOU
