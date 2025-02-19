@@ -3,11 +3,10 @@ package iou.gui;
 import iou.controller.Controller;
 import iou.enums.User;
 import iou.util.GuiUtils;
-import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.logging.log4j.Logger;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdesktop.application.Application;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.swing.ButtonGroup;
@@ -38,12 +37,10 @@ public class LoginFrame extends javax.swing.JFrame {
         // Change the cursor to an hourglass
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
 
-        try {
+        try (var applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml")) {
             User currentUser = annButton.isSelected() ? User.ANN : User.BOB;
             String username = currentUser.getUsername();
             String password = new String(passwordField.getPassword());
-
-            ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml");
 
             Controller controller = (Controller) applicationContext.getBean("controller");
             BasicDataSource dataSource = (BasicDataSource) applicationContext.getBean("dataSource");
