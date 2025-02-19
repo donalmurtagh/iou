@@ -21,6 +21,7 @@ public class ExpenseTableModel extends TransactionTableModel {
      *
      * @return The number of table columns
      */
+    @Override
     public int getColumnCount() {
         return ExpenseField.values().length;
     }
@@ -50,10 +51,10 @@ public class ExpenseTableModel extends TransactionTableModel {
             expense.setDescription(fieldValue);
 
         } else if (column == ExpenseField.ANN_PAID.getIndex()) {
-            expense.setAnnPaid(new Float(fieldValue));
+            expense.setAnnPaid(Float.parseFloat(fieldValue));
 
         } else if (column == ExpenseField.BOB_PAID.getIndex()) {
-            expense.setBobPaid(new Float(fieldValue));
+            expense.setBobPaid(Float.parseFloat(fieldValue));
 
         } else {
             throw new IllegalArgumentException("Invalid column index: " + column);
@@ -70,6 +71,7 @@ public class ExpenseTableModel extends TransactionTableModel {
      *         will the result of calling <code>toString</code> on this
      *         object.
      */
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Expense expense = (Expense) txnRecords.get(rowIndex);
 

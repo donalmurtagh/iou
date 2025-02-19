@@ -15,26 +15,32 @@ public class ControllerImpl implements Controller {
         this.transactionDao = transactionDao;
     }
 
+    @Override
     public void login(String username, String password) {
         transactionDao.testConnection();
     }
 
+    @Override
     public List<Transaction> getTransactions(TransactionType type) {
         return transactionDao.getTransactions(type);
     }
 
+    @Override
     public Transaction insertTransaction(Transaction tran) {
         return transactionDao.insertTransaction(tran);
     }
 
+    @Override
     public boolean updateTransaction(Transaction tran) {
         return transactionDao.updateTransaction(tran);
     }
 
+    @Override
     public boolean deleteTransaction(Long id) {
         return transactionDao.deleteTransaction(id);
     }
 
+    @Override
     public void archiveTransactions(Float netBobBalance) {
 
         // Archive all current transactions

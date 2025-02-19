@@ -76,6 +76,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements Tran
     /* (non-Javadoc)
      * @see iou.controller.ITransactionDao#testConnection()
      */
+    @Override
     public void testConnection() {
         // Execute this just for the side effect of raising an exception
         // if there's something wrong with the connection or schema;
@@ -85,6 +86,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements Tran
     /* (non-Javadoc)
      * @see iou.controller.ITransactionDao#deleteTransaction(java.lang.Long)
      */
+    @Override
     public boolean deleteTransaction(Long id) {
         int rowsAffected = getJdbcTemplate().update("""
                 delete from transaction
@@ -93,6 +95,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements Tran
         return rowsAffected == 1;
     }
 
+    @Override
     public boolean updateTransaction(Transaction tran) {
         return tranUpdater.doUpdate(tran);
     }
@@ -100,6 +103,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements Tran
     /* (non-Javadoc)
      * @see iou.controller.ITransactionDao#insertTransaction(iou.model.Transaction)
      */
+    @Override
     public Transaction insertTransaction(final Transaction tran) {
         // Will hold the ID of the row created by the insert
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -150,6 +154,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements Tran
      * (non-Javadoc)
      * @see iou.controller.ITransactionDao#getTransactions(iou.enums.TransactionType)
      */
+    @Override
     public List<Transaction> getTransactions(TransactionType type) {
         return getSimpleJdbcTemplate().query("""
                 select id, type, tran_date, description, ann_paid, bob_paid
@@ -161,6 +166,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements Tran
     /* (non-Javadoc)
      * @see iou.controller.ITransactionDao#archiveTransactions(java.lang.Float)
      */
+    @Override
     public void archiveTransactions() {
         // Set all current transactions to archived
         getJdbcTemplate().update("""

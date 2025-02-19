@@ -176,10 +176,8 @@ public class TransactionDialog extends JDialog {
             okButton.setText("OK");
             okButton.addActionListener(e -> {
 
-                // If the transaction is valid set the status and close
-                // the
-                // window. If it's not valid a message box should pop up
-                // and the user will be able to fix the problem
+                // If the transaction is valid set the status and close the window. If it's not valid a message box
+                // should pop up and the user will be able to fix the problem
                 if (updateTransaction()) {
                     close(true);
                 }
@@ -271,12 +269,15 @@ public class TransactionDialog extends JDialog {
             this.otherAmountField = otherAmountField;
         }
 
+        @Override
         public void changedUpdate(DocumentEvent e) { }
 
+        @Override
         public void insertUpdate(DocumentEvent e) {
             otherAmountField.setText("");
         }
 
+        @Override
         public void removeUpdate(DocumentEvent e) { }
     }
 }

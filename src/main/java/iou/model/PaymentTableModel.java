@@ -22,6 +22,7 @@ public class PaymentTableModel extends TransactionTableModel {
      *
      * @return The number of table columns
      */
+    @Override
     public int getColumnCount() {
         return PaymentField.values().length;
     }
@@ -53,10 +54,10 @@ public class PaymentTableModel extends TransactionTableModel {
         } else if (column == PaymentField.PAID_BY.getIndex()) {
 
             if (aValue.toString().equals(User.ANN)) {
-                payment.setAnnPaid(new Float(fieldValue));
+                payment.setAnnPaid(Float.parseFloat(fieldValue));
 
             } else if (aValue.toString().equals(User.BOB)) {
-                payment.setBobPaid(new Float(fieldValue));
+                payment.setBobPaid(Float.parseFloat(fieldValue));
 
             } else {
                 throw new IllegalArgumentException("Unrecognised user: " + aValue);
@@ -76,6 +77,7 @@ public class PaymentTableModel extends TransactionTableModel {
      *         will the result of calling <code>toString</code> on this
      *         object.
      */
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Payment payment = (Payment) txnRecords.get(rowIndex);
 
@@ -87,7 +89,6 @@ public class PaymentTableModel extends TransactionTableModel {
 
         } else if (columnIndex == PaymentField.PAID_BY.getIndex()) {
 
-            //LOGGER.debug("Getting payee for payment: " + payment);
             if (payment.getBobPaid() != 0) {
                 return User.BOB;
 

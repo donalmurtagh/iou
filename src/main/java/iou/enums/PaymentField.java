@@ -7,19 +7,21 @@ public enum PaymentField implements Field {
     PAID_BY("Paid By", 2),
     AMOUNT("Amount", 3);
 
-    private String name;
+    private final String name;
 
-    private int index;
+    private final int index;
 
-    private PaymentField(String name, int position) {
+    PaymentField(String name, int position) {
         this.name = name;
         this.index = position;
     }
 
+    @Override
     public int getIndex() {
         return index;
     }
 
+    @Override
     public String getName() {
         return name;
     }
