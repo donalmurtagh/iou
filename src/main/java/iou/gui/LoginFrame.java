@@ -4,7 +4,8 @@ import iou.controller.Controller;
 import iou.enums.User;
 import iou.util.GuiUtils;
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jdesktop.application.Application;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -26,7 +27,7 @@ import java.awt.Cursor;
  */
 public class LoginFrame extends javax.swing.JFrame {
 
-    private static final Logger LOGGER = Logger.getLogger(LoginFrame.class);
+    private static final Logger LOGGER = LogManager.getLogger(LoginFrame.class);
 
     private JPasswordField passwordField;
 
@@ -49,7 +50,7 @@ public class LoginFrame extends javax.swing.JFrame {
             dataSource.setUsername(username);
             dataSource.setPassword(password);
 
-            LOGGER.debug("Attempting to login with username: " + username);
+            LOGGER.debug("Attempting to login with username: {}", username);
 
             try {
                 controller.login(username, password);
@@ -59,7 +60,7 @@ public class LoginFrame extends javax.swing.JFrame {
                 applicationContext.getBean("mainFrame");
 
             } catch (Exception ex) {
-                LOGGER.error("Login failed for user: " + username, ex);
+                LOGGER.error("Login failed for user: {}", username, ex);
                 JOptionPane.showMessageDialog(this, """
                         Login failed. Likely causes:
                         - Password typed incorrectly

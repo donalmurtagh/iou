@@ -13,7 +13,8 @@ import iou.model.PaymentTableModel;
 import iou.model.Transaction;
 import iou.model.TransactionTableModel;
 import iou.util.GuiUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -80,7 +81,7 @@ public class MainFrame extends JFrame {
         PAYMENT, EXPENSE, BOTH
     }
 
-    private static final Logger LOGGER = Logger.getLogger(MainFrame.class);
+    private static final Logger LOGGER = LogManager.getLogger(MainFrame.class);
 
     public MainFrame(Controller controller) {
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
@@ -107,13 +108,13 @@ public class MainFrame extends JFrame {
         try {
             // Get all the expenses
             List<Transaction> expenses = controller.getTransactions(TransactionType.EXPENSE);
-            LOGGER.debug("Retrieved initial list of " + expenses.size() + " expenses");
+            LOGGER.debug("Retrieved initial list of {} expenses", expenses.size());
             expensesTableModel = new ExpenseTableModel(expenses);
             expensesTable.setModel(expensesTableModel);
 
             // Get all the payments
             List<Transaction> payments = controller.getTransactions(TransactionType.PAYMENT);
-            LOGGER.debug("Retrieved initial list of " + payments.size() + " payments");
+            LOGGER.debug("Retrieved initial list of {} payments", payments.size());
             paymentsTableModel = new PaymentTableModel(payments);
             paymentsTable.setModel(paymentsTableModel);
 
@@ -245,7 +246,7 @@ public class MainFrame extends JFrame {
         for (Transaction expense : expensesTableModel.GetAllTransactions()) {
             bobExpenseBalance += expense.getBobPaid() - expense.getAnnPaid();
         }
-        LOGGER.debug("Bob's net expenses balance is: " + bobExpenseBalance);
+        LOGGER.debug("Bob's net expenses balance is: {}", bobExpenseBalance);
 
         // Get the net difference in payments
         float bobPaymentBalance = 0;
@@ -253,11 +254,11 @@ public class MainFrame extends JFrame {
         for (Transaction payment : paymentsTableModel.GetAllTransactions()) {
             bobPaymentBalance += payment.getBobPaid() - payment.getAnnPaid();
         }
-        LOGGER.debug("Bob's net payments balance is: " + bobPaymentBalance);
+        LOGGER.debug("Bob's net payments balance is: {}", bobPaymentBalance);
 
         // Ann owes Bob for his net payments to her and 50% of his net contributions towards the expenses
         this.netBobBalance = (bobExpenseBalance / 2) + bobPaymentBalance;
-        LOGGER.debug("Bob's overall net balance is: " + this.netBobBalance);
+        LOGGER.debug("Bob's overall net balance is: {}", this.netBobBalance);
     }
 
     /**
@@ -291,7 +292,7 @@ public class MainFrame extends JFrame {
     }
 
     private void persistDeletedTransaction(Transaction tran) {
-        LOGGER.debug("Deleting transaction: " + tran);
+        LOGGER.debug("Deleting transaction: {}", tran);
 
         try {
             if (controller.deleteTransaction(tran.getId())) {
@@ -332,7 +333,7 @@ public class MainFrame extends JFrame {
      * @param tran          The updated transaction
      */
     private void persistUpdatedTransaction(int tableRowIndex, Transaction tran) {
-        LOGGER.debug("Updated transaction passed validation: " + tran);
+        LOGGER.debug("Updated transaction passed validation: {}", tran);
 
         try {
             if (controller.updateTransaction(tran)) {
@@ -357,7 +358,7 @@ public class MainFrame extends JFrame {
      * Add the transaction to the DB and the JTable
      */
     private void persistNewTransaction(Transaction tran) {
-        LOGGER.debug("New transaction passed validation: " + tran);
+        LOGGER.debug("New transaction passed validation: {}", tran);
 
         try {
             Transaction persistedTran = controller.insertTransaction(tran);
@@ -498,7 +499,7 @@ public class MainFrame extends JFrame {
         editPmtButton.setToolTipText("Edit the selected payment");
 
         this.balanceLabel.setForeground(Color.RED);
-        LOGGER.debug("Current width is: " + this.getWidth());
+        LOGGER.debug("Current width is: {}", this.getWidth());
 
         GuiUtils.showCentered(this);
     }

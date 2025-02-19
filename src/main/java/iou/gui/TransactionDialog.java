@@ -7,7 +7,8 @@ import iou.enums.User;
 import iou.model.Transaction;
 import iou.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jdesktop.application.Application;
 
 import javax.swing.BorderFactory;
@@ -48,7 +49,7 @@ public class TransactionDialog extends JDialog {
 
     private final TranDialogMode mode;
 
-    private static final Logger LOGGER = Logger.getLogger(TransactionDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(TransactionDialog.class);
 
     /**
      * Shows this dialog in modal mode
@@ -112,9 +113,9 @@ public class TransactionDialog extends JDialog {
 
         try {
             if (StringUtils.isNotBlank(dateField.getText())) {
-                LOGGER.debug("Date field contains text: " + dateField.getText());
+                LOGGER.debug("Date field contains text: {}", dateField.getText());
                 Date parsedDate = DateUtils.string2Date(dateField.getText());
-                LOGGER.debug("Parsed date is: " + parsedDate);
+                LOGGER.debug("Parsed date is: {}", parsedDate);
 
                 tran.setDate(DateUtils.string2Date(dateField.getText()));
             }

@@ -3,14 +3,15 @@ package iou.model;
 import iou.enums.PaymentField;
 import iou.enums.User;
 import iou.util.DateUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.text.ParseException;
 import java.util.List;
 
 public class PaymentTableModel extends TransactionTableModel {
 
-    private static final Logger LOGGER = Logger.getLogger(PaymentTableModel.class);
+    private static final Logger LOGGER = LogManager.getLogger(PaymentTableModel.class);
 
     public PaymentTableModel(List<Transaction> records) {
         super(records);
@@ -44,7 +45,7 @@ public class PaymentTableModel extends TransactionTableModel {
             try {
                 payment.setDate(DateUtils.string2Date(fieldValue));
             } catch (ParseException e) {
-                LOGGER.error("Error parsing date value: " + fieldValue);
+                LOGGER.error("Error parsing date value: {}", fieldValue);
                 // TODO: Do something a bit smarter
                 throw new IllegalArgumentException(e);
             }

@@ -4,7 +4,8 @@ import iou.enums.TransactionType;
 import iou.model.Expense;
 import iou.model.Payment;
 import iou.model.Transaction;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements TransactionDao {
 
-    private static final Logger LOGGER = Logger.getLogger(JdbcTransactionDaoImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(JdbcTransactionDaoImpl.class);
 
     private UpdateTransaction tranUpdater;
 
@@ -68,7 +69,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements Tran
                     tran.getId()};
 
             int rowsAffected = update(params);
-            LOGGER.debug("Rows affected by update: " + rowsAffected);
+            LOGGER.debug("Rows affected by update: {}", rowsAffected);
             return rowsAffected == 1;
         }
     }
@@ -91,7 +92,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements Tran
         int rowsAffected = getJdbcTemplate().update("""
                 delete from transaction
                 where id = ?""", new Object[]{id});
-        LOGGER.debug("Rows affected by delete: " + rowsAffected);
+        LOGGER.debug("Rows affected by delete: {}", rowsAffected);
         return rowsAffected == 1;
     }
 
