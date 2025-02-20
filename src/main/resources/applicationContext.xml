@@ -32,9 +32,7 @@
     </bean>
 
     <bean id="transactionDao" class="iou.controller.JdbcTransactionDaoImpl">
-        <property name="dataSource">
-            <ref local="dataSource"/>
-        </property>
+        <constructor-arg ref="dataSource" />
     </bean>
 
     <bean id="controller" class="iou.controller.ControllerImpl">

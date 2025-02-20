@@ -24,14 +24,11 @@ public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements Transactio
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JdbcTransactionDaoImpl.class);
 
-    private UpdateTransaction tranUpdater;
+    private final UpdateTransaction tranUpdater;
 
-    /* (non-Javadoc)
-     * @see org.springframework.dao.support.DaoSupport#initDao()
-     */
-    @Override
-    protected void initDao() {
-        tranUpdater = new UpdateTransaction(getDataSource());
+    public JdbcTransactionDaoImpl(DataSource dataSource) {
+        super.setDataSource(dataSource);
+        tranUpdater = new UpdateTransaction(dataSource);
     }
 
     /**
