@@ -39,7 +39,7 @@
         <constructor-arg ref="transactionDao"/>
     </bean>
 
-    <bean id="mainFrame" class="iou.gui.MainFrame" lazy-init="true">
+    <bean class="iou.gui.MainFrame" lazy-init="true">
         <constructor-arg ref="controller"/>
     </bean>
 </beans>

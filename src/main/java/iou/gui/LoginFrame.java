@@ -42,8 +42,8 @@ public class LoginFrame extends javax.swing.JFrame {
             String username = currentUser.getUsername();
             String password = new String(passwordField.getPassword());
 
-            Controller controller = (Controller) applicationContext.getBean("controller");
-            BasicDataSource dataSource = (BasicDataSource) applicationContext.getBean("dataSource");
+            Controller controller = applicationContext.getBean(Controller.class);
+            BasicDataSource dataSource = applicationContext.getBean(BasicDataSource.class);
             dataSource.setUsername(username);
             dataSource.setPassword(password);
 
@@ -54,7 +54,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
                 // Close this window and open the main window instead
                 dispose();
-                applicationContext.getBean("mainFrame");
+                applicationContext.getBean(MainFrame.class);
 
             } catch (Exception ex) {
                 LOGGER.error("Login failed for user: {}", username, ex);
