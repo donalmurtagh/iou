@@ -27,7 +27,7 @@
         </tx:attributes>
     </tx:advice>
 
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
         <property name="location" value="config.properties"/>
     </bean>
 
