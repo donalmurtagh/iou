@@ -1,5 +1,7 @@
 package iou.enums;
 
+import java.util.Arrays;
+
 public enum ExpenseField implements Field {
 
     DATE("Date", DATE_COLUMN_INDEX),
@@ -27,12 +29,9 @@ public enum ExpenseField implements Field {
     }
 
     public static ExpenseField getByIndex(int index) {
-
-        for (ExpenseField field : ExpenseField.values()) {
-            if (field.getIndex() == index) {
-                return field;
-            }
-        }
-        return null;
+        return Arrays.stream(values())
+            .filter(field -> field.getIndex() == index)
+            .findFirst()
+            .orElse(null);
     }
 }

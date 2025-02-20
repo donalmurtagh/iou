@@ -6,5 +6,5 @@ public interface Field {
 
     int getIndex();
 
-    public static final int DATE_COLUMN_INDEX = 0;
+    int DATE_COLUMN_INDEX = 0;
 }
