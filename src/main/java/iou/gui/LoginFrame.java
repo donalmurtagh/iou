@@ -3,7 +3,7 @@ package iou.gui;
 import iou.controller.Controller;
 import iou.enums.User;
 import iou.util.GuiUtils;
-import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.jdesktop.application.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
