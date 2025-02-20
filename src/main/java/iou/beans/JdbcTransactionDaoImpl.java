@@ -6,10 +6,9 @@ import iou.model.Payment;
 import iou.model.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -18,7 +17,6 @@ import javax.sql.DataSource;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 
 @Repository
@@ -26,103 +24,54 @@ public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements Transactio
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JdbcTransactionDaoImpl.class);
 
-    private final UpdateTransaction tranUpdater;
-
     public JdbcTransactionDaoImpl(DataSource dataSource) {
         super.setDataSource(dataSource);
-        tranUpdater = new UpdateTransaction(dataSource);
     }
 
-    /**
-     * Encapsulates a transaction row update
-     *
-     * @author dmurtagh
-     */
-    public static class UpdateTransaction extends SqlUpdate {
-
-        public UpdateTransaction(DataSource ds) {
-            setDataSource(ds);
-            setSql("""
-                    update transaction
-                    set type = ?, tran_date = ?, description = ?, ann_paid = ?, bob_paid = ?
-                    where id = ?""");
-            declareParameter(new SqlParameter(Types.VARCHAR));
-            declareParameter(new SqlParameter(Types.DATE));
-            declareParameter(new SqlParameter(Types.VARCHAR));
-            declareParameter(new SqlParameter(Types.FLOAT));
-            declareParameter(new SqlParameter(Types.FLOAT));
-            declareParameter(new SqlParameter(Types.NUMERIC));
-            compile();
-        }
-
-        /**
-         * Execute the transaction update SQL
-         *
-         * @param tran
-         * @return
-         */
-        public boolean doUpdate(Transaction tran) {
-
-            Object[] params = {tran.getTransactionType().toString(), tran.getDate(),
-                    tran.getDescription(), tran.getAnnPaid(), tran.getBobPaid(),
-                    tran.getId()};
-
-            int rowsAffected = update(params);
-            LOGGER.debug("Rows affected by update: {}", rowsAffected);
-            return rowsAffected == 1;
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see iou.controller.ITransactionDao#testConnection()
-     */
     @Override
     public void testConnection() {
-        // Execute this just for the side effect of raising an exception
-        // if there's something wrong with the connection or schema;
         getJdbcTemplate().execute("select 1 from transaction where 1 = 2");
     }
 
-    /* (non-Javadoc)
-     * @see iou.controller.ITransactionDao#deleteTransaction(java.lang.Long)
-     */
     @Override
     public boolean deleteTransaction(Long id) {
-        int rowsAffected = getJdbcTemplate().update("""
-                delete from transaction
-                where id = ?""", id);
+        int rowsAffected = getJdbcTemplate().update("delete from transaction where id = ?", id);
         LOGGER.debug("Rows affected by delete: {}", rowsAffected);
         return rowsAffected == 1;
     }
 
     @Override
     public boolean updateTransaction(Transaction tran) {
-        return tranUpdater.doUpdate(tran);
+        Object[] params = {
+            tran.getTransactionType().toString(),
+            tran.getDate(),
+            tran.getDescription(),
+            tran.getAnnPaid(),
+            tran.getBobPaid(),
+            tran.getId()
+        };
+        int rowsUpdated = getJdbcTemplate().update("""
+                    update transaction
+                    set type = ?, tran_date = ?, description = ?, ann_paid = ?, bob_paid = ?
+                    where id = ?""", params);
+        return rowsUpdated == 1;
     }
 
-    /* (non-Javadoc)
-     * @see iou.controller.ITransactionDao#insertTransaction(iou.model.Transaction)
-     */
     @Override
     public Transaction insertTransaction(final Transaction tran) {
         // Will hold the ID of the row created by the insert
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        // TODO: maybe this instance of PreparedStatementCreator could be
-        // reused, rather than creating a new object each time this method is called
         getJdbcTemplate().update(connection -> {
             PreparedStatement ps = connection.prepareStatement("""
                     insert into transaction (type, tran_date, description, ann_paid, bob_paid)
                     values(?, ?, ?, ?, ?)""", Statement.RETURN_GENERATED_KEYS);
 
-            ps.setString(1, tran.getTransactionType().toString());
-
             Date sqlDate = new Date(tran.getDate().getTime());
+            ps.setString(1, tran.getTransactionType().toString());
             ps.setDate(2, sqlDate);
             ps.setString(3, tran.getDescription());
             ps.setFloat(4, tran.getAnnPaid());
             ps.setFloat(5, tran.getBobPaid());
-
             return ps;
         }, keyHolder);
 
@@ -150,10 +99,6 @@ public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements Transactio
         return tran;
     };
 
-    /*
-     * (non-Javadoc)
-     * @see iou.controller.ITransactionDao#getTransactions(iou.enums.TransactionType)
-     */
     @Override
     public List<Transaction> getTransactions(TransactionType type) {
         return getJdbcTemplate().query("""
@@ -163,14 +108,9 @@ public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements Transactio
                 and type = ?""", rowMapper, type.toString());
     }
 
-    /* (non-Javadoc)
-     * @see iou.controller.ITransactionDao#archiveTransactions(java.lang.Float)
-     */
     @Override
     public void archiveTransactions() {
         // Set all current transactions to archived
-        getJdbcTemplate().update("""
-                update transaction
-                set archived = 1""");
+        getJdbcTemplate().update("update transaction set archived = 1");
     }
 }
