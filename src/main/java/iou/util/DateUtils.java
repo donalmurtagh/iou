@@ -1,7 +1,7 @@
 package iou.util;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -12,7 +12,7 @@ public final class DateUtils {
 
     private static final DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy");
 
-    private static final Logger LOGGER = LogManager.getLogger(DateUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DateUtils.class);
 
     static {
         dateFormatter.setLenient(false);

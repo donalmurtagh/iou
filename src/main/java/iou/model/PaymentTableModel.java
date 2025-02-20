@@ -3,15 +3,15 @@ package iou.model;
 import iou.enums.PaymentField;
 import iou.enums.User;
 import iou.util.DateUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.List;
 
 public class PaymentTableModel extends TransactionTableModel {
 
-    private static final Logger LOGGER = LogManager.getLogger(PaymentTableModel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentTableModel.class);
 
     public PaymentTableModel(List<Transaction> records) {
         super(records);

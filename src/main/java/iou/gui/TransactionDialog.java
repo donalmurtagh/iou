@@ -7,9 +7,9 @@ import iou.enums.User;
 import iou.model.Transaction;
 import iou.util.DateUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.jdesktop.application.Application;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -49,7 +49,7 @@ public class TransactionDialog extends JDialog {
 
     private final TranDialogMode mode;
 
-    private static final Logger LOGGER = LogManager.getLogger(TransactionDialog.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionDialog.class);
 
     /**
      * Shows this dialog in modal mode

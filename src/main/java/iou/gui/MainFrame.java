@@ -13,8 +13,8 @@ import iou.model.PaymentTableModel;
 import iou.model.Transaction;
 import iou.model.TransactionTableModel;
 import iou.util.GuiUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -81,7 +81,7 @@ public class MainFrame extends JFrame {
         PAYMENT, EXPENSE, BOTH
     }
 
-    private static final Logger LOGGER = LogManager.getLogger(MainFrame.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainFrame.class);
 
     public MainFrame(Controller controller) {
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
@@ -531,7 +531,7 @@ public class MainFrame extends JFrame {
     }
 
     private void handleFatalException(Exception ex) {
-        LOGGER.fatal("Fatal error occurred", ex);
+        LOGGER.error("Fatal error occurred", ex);
         JOptionPane.showMessageDialog(this,
                 "An unexpected error occurred.\nPlease consult the logs for further information.", "Fatal Error",
                 JOptionPane.ERROR_MESSAGE);

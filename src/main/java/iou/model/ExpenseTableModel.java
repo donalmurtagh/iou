@@ -2,15 +2,15 @@ package iou.model;
 
 import iou.enums.ExpenseField;
 import iou.util.DateUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.List;
 
 public class ExpenseTableModel extends TransactionTableModel {
 
-    private static final Logger LOGGER = LogManager.getLogger(ExpenseTableModel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseTableModel.class);
 
     public ExpenseTableModel(List<Transaction> records) {
         super(records);
