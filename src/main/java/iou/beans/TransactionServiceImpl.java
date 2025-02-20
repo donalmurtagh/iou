@@ -1,17 +1,19 @@
-package iou.controller;
+package iou.beans;
 
 import iou.enums.TransactionType;
 import iou.model.Payment;
 import iou.model.Transaction;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
-public class ControllerImpl implements Controller {
+@Service
+public class TransactionServiceImpl implements TrasactionService {
 
     private final TransactionDao transactionDao;
 
-    public ControllerImpl(TransactionDao transactionDao) {
+    public TransactionServiceImpl(TransactionDao transactionDao) {
         this.transactionDao = transactionDao;
     }
 
@@ -31,13 +33,13 @@ public class ControllerImpl implements Controller {
     }
 
     @Override
-    public boolean updateTransaction(Transaction tran) {
-        return transactionDao.updateTransaction(tran);
+    public void updateTransaction(Transaction tran) {
+        transactionDao.updateTransaction(tran);
     }
 
     @Override
-    public boolean deleteTransaction(Long id) {
-        return transactionDao.deleteTransaction(id);
+    public void deleteTransaction(Long id) {
+        transactionDao.deleteTransaction(id);
     }
 
     @Override

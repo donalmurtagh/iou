@@ -2,15 +2,15 @@ package iou.model;
 
 import iou.enums.ExpenseField;
 import iou.util.DateUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.List;
 
 public class ExpenseTableModel extends TransactionTableModel {
 
-    private static final Logger LOGGER = LogManager.getLogger(ExpenseTableModel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseTableModel.class);
 
     public ExpenseTableModel(List<Transaction> records) {
         super(records);
@@ -69,8 +69,7 @@ public class ExpenseTableModel extends TransactionTableModel {
      * @param rowIndex    The specified row index number
      * @param columnIndex The specified column index number
      * @return The object to show in the specified cell. The displayed value
-     *         will the result of calling <code>toString</code> on this
-     *         object.
+     * will be the result of calling <code>toString</code> on this object.
      */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {

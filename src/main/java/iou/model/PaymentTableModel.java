@@ -3,15 +3,15 @@ package iou.model;
 import iou.enums.PaymentField;
 import iou.enums.User;
 import iou.util.DateUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.List;
 
 public class PaymentTableModel extends TransactionTableModel {
 
-    private static final Logger LOGGER = LogManager.getLogger(PaymentTableModel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentTableModel.class);
 
     public PaymentTableModel(List<Transaction> records) {
         super(records);
@@ -75,8 +75,7 @@ public class PaymentTableModel extends TransactionTableModel {
      * @param rowIndex    The specified row index number
      * @param columnIndex The specified column index number
      * @return The object to show in the specified cell. The displayed value
-     *         will the result of calling <code>toString</code> on this
-     *         object.
+     * will be the result of calling <code>toString</code> on this object.
      */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -98,7 +97,7 @@ public class PaymentTableModel extends TransactionTableModel {
 
             } else {
                 throw new RuntimeException("Could not determine payee for record ID: "
-                        + payment.getId());
+                    + payment.getId());
             }
 
         } else if (columnIndex == PaymentField.AMOUNT.getIndex()) {
@@ -111,7 +110,7 @@ public class PaymentTableModel extends TransactionTableModel {
 
             } else {
                 throw new RuntimeException("Could not determine payee for record ID: "
-                        + payment.getId());
+                    + payment.getId());
             }
 
         } else {

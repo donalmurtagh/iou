@@ -4,6 +4,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class defines the table model of the <code>JTable</code> used in the
@@ -47,8 +48,7 @@ public abstract class TransactionTableModel extends DefaultTableModel {
      */
     @Override
     public final int getRowCount() {
-
-        return txnRecords == null ? 0 : txnRecords.size();
+        return Optional.ofNullable(txnRecords).map(List::size).orElse(0);
     }
 
     /**
@@ -66,7 +66,7 @@ public abstract class TransactionTableModel extends DefaultTableModel {
      *
      * @return
      */
-    public final List<Transaction> GetAllTransactions() {
+    public final List<Transaction> getAllTransactions() {
         return Collections.unmodifiableList(txnRecords);
     }
 }

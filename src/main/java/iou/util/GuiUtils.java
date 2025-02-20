@@ -1,7 +1,7 @@
 package iou.util;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
@@ -14,7 +14,7 @@ import java.awt.Window;
 
 public final class GuiUtils {
 
-    private static final Logger LOGGER = LogManager.getLogger(GuiUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GuiUtils.class);
 
     private static Image applicationImage;
 

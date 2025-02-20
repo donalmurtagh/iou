@@ -1,12 +1,12 @@
 package iou.gui;
 
-import iou.controller.Controller;
+import iou.beans.TrasactionService;
 import iou.enums.User;
 import iou.util.GuiUtils;
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.jdesktop.application.Application;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.swing.ButtonGroup;
@@ -26,49 +26,16 @@ import java.awt.Cursor;
  */
 public class LoginFrame extends javax.swing.JFrame {
 
-    private static final Logger LOGGER = LogManager.getLogger(LoginFrame.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginFrame.class);
 
     private JPasswordField passwordField;
 
     private JRadioButton annButton;
 
-    private void doLogin() {
-
-        // Change the cursor to an hourglass
-        GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
-
-        try (var applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml")) {
-            User currentUser = annButton.isSelected() ? User.ANN : User.BOB;
-            String username = currentUser.getUsername();
-            String password = new String(passwordField.getPassword());
-
-            Controller controller = (Controller) applicationContext.getBean("controller");
-            BasicDataSource dataSource = (BasicDataSource) applicationContext.getBean("dataSource");
-            dataSource.setUsername(username);
-            dataSource.setPassword(password);
-
-            LOGGER.debug("Attempting to login with username: {}", username);
-
-            try {
-                controller.login(username, password);
-
-                // Close this window and open the main window instead
-                dispose();
-                applicationContext.getBean("mainFrame");
-
-            } catch (Exception ex) {
-                LOGGER.error("Login failed for user: {}", username, ex);
-                JOptionPane.showMessageDialog(this, """
-                        Login failed. Likely causes:
-                        - Password typed incorrectly
-                        - MySQL is not running
-                        - Database is not initialized""",
-                        "Login Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } finally {
-            // Change the cursor back
-            GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
-        }
+    public LoginFrame() {
+        super("Login to IOU");
+        this.setResizable(false);
+        initGUI();
     }
 
     /**
@@ -82,10 +49,43 @@ public class LoginFrame extends javax.swing.JFrame {
         });
     }
 
-    public LoginFrame() {
-        super("Login to IOU");
-        this.setResizable(false);
-        initGUI();
+    private void doLogin() {
+
+        // Change the cursor to an hourglass
+        GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
+
+        try (var applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml")) {
+            User currentUser = annButton.isSelected() ? User.ANN : User.BOB;
+            String username = currentUser.getUsername();
+            String password = new String(passwordField.getPassword());
+
+            TrasactionService trasactionService = applicationContext.getBean(TrasactionService.class);
+            BasicDataSource dataSource = applicationContext.getBean(BasicDataSource.class);
+            dataSource.setUsername(username);
+            dataSource.setPassword(password);
+
+            LOGGER.debug("Attempting to login with username: {}", username);
+
+            try {
+                trasactionService.login(username, password);
+
+                // Close this window and open the main window instead
+                dispose();
+                new MainFrame(trasactionService);
+
+            } catch (Exception ex) {
+                LOGGER.error("Login failed for user: {}", username, ex);
+                JOptionPane.showMessageDialog(this, """
+                        Login failed. Likely causes:
+                        - Password typed incorrectly
+                        - MySQL is not running
+                        - Database is not initialized""",
+                    "Login Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } finally {
+            // Change the cursor back
+            GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
+        }
     }
 
     private void initGUI() {

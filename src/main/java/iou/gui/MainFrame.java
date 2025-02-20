@@ -1,6 +1,6 @@
 package iou.gui;
 
-import iou.controller.Controller;
+import iou.beans.TrasactionService;
 import iou.enums.ExpenseField;
 import iou.enums.PaymentField;
 import iou.enums.TranDialogMode;
@@ -13,8 +13,8 @@ import iou.model.PaymentTableModel;
 import iou.model.Transaction;
 import iou.model.TransactionTableModel;
 import iou.util.GuiUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -31,6 +31,7 @@ import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -44,32 +45,21 @@ import java.util.Properties;
  */
 public class MainFrame extends JFrame {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainFrame.class);
+
     private final JButton editPmtButton = new JButton();
-
-    private JButton archiveButton;
-
     private final JLabel balanceLabel = new JLabel();
-
     private final JButton addExpButton = new JButton();
-
     private final JButton deleteExpButton = new JButton();
-
     private final JButton deletePmtButton = new JButton();
-
     private final JTable expensesTable = new TransactionTable();
-
     private final JTable paymentsTable = new TransactionTable();
-
     private final JButton editExpButton = new JButton();
-
     private final JButton addPmtButton = new JButton();
-
+    private final TrasactionService trasactionService;
+    private JButton archiveButton;
     private TransactionTableModel expensesTableModel;
-
-    private final Controller controller;
-
     private TransactionTableModel paymentsTableModel;
-
     private NumberFormat currencyFormatter;
 
     /**
@@ -77,15 +67,9 @@ public class MainFrame extends JFrame {
      */
     private float netBobBalance;
 
-    private enum TableUpdateType {
-        PAYMENT, EXPENSE, BOTH
-    }
-
-    private static final Logger LOGGER = LogManager.getLogger(MainFrame.class);
-
-    public MainFrame(Controller controller) {
+    public MainFrame(TrasactionService trasactionService) {
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
-        this.controller = controller;
+        this.trasactionService = trasactionService;
         initUI();
 
         try {
@@ -104,16 +88,31 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Updates the visual state of a table and it's associated edit and delete buttons
+     *
+     * @param table
+     * @param editButton
+     * @param deleteButton
+     */
+    private static void updateTableAndButtonsUI(JTable table, JButton editButton, JButton deleteButton) {
+        table.updateUI();
+        boolean rowsExist = (table.getModel().getRowCount() > 0);
+        deleteButton.setEnabled(rowsExist);
+        editButton.setEnabled(rowsExist);
+        GuiUtils.selectLastRow(table);
+    }
+
     private void loadData() {
         try {
             // Get all the expenses
-            List<Transaction> expenses = controller.getTransactions(TransactionType.EXPENSE);
+            List<Transaction> expenses = trasactionService.getTransactions(TransactionType.EXPENSE);
             LOGGER.debug("Retrieved initial list of {} expenses", expenses.size());
             expensesTableModel = new ExpenseTableModel(expenses);
             expensesTable.setModel(expensesTableModel);
 
             // Get all the payments
-            List<Transaction> payments = controller.getTransactions(TransactionType.PAYMENT);
+            List<Transaction> payments = trasactionService.getTransactions(TransactionType.PAYMENT);
             LOGGER.debug("Retrieved initial list of {} payments", payments.size());
             paymentsTableModel = new PaymentTableModel(payments);
             paymentsTable.setModel(paymentsTableModel);
@@ -135,7 +134,7 @@ public class MainFrame extends JFrame {
         Transaction selectedPayment = paymentsTableModel.getTransaction(selectedRowIndex);
 
         TransactionDialog paymentDialog = new TransactionDialog(this,
-                TranDialogMode.UPDATE_PAYMENT, selectedPayment);
+            TranDialogMode.UPDATE_PAYMENT, selectedPayment);
         GuiUtils.showCentered(paymentDialog);
 
         if (paymentDialog.isValidTransaction()) {
@@ -145,7 +144,7 @@ public class MainFrame extends JFrame {
 
     private void showAddPaymentDialog() {
         TransactionDialog paymentDialog = new TransactionDialog(this,
-                TranDialogMode.ADD_PAYMENT, new Payment());
+            TranDialogMode.ADD_PAYMENT, new Payment());
         GuiUtils.showCentered(paymentDialog);
 
         if (paymentDialog.isValidTransaction()) {
@@ -158,27 +157,12 @@ public class MainFrame extends JFrame {
      */
     private void showAddExpenseDialog() {
         TransactionDialog expenseDialog = new TransactionDialog(this,
-                TranDialogMode.ADD_EXPENSE, new Expense());
+            TranDialogMode.ADD_EXPENSE, new Expense());
         GuiUtils.showCentered(expenseDialog);
 
         if (expenseDialog.isValidTransaction()) {
             persistNewTransaction(expenseDialog.getTransaction());
         }
-    }
-
-    /**
-     * Updates the visual state of a table and it's associated edit and delete buttons
-     *
-     * @param table
-     * @param editButton
-     * @param deleteButton
-     */
-    private static void updateTableAndButtonsUI(JTable table, JButton editButton, JButton deleteButton) {
-        table.updateUI();
-        boolean rowsExist = (table.getModel().getRowCount() > 0);
-        deleteButton.setEnabled(rowsExist);
-        editButton.setEnabled(rowsExist);
-        GuiUtils.selectLastRow(table);
     }
 
     /**
@@ -203,7 +187,7 @@ public class MainFrame extends JFrame {
         int paymentsTotal = paymentsTable.getRowCount();
         int expensesTotal = expensesTable.getRowCount();
         boolean enableArchive = paymentsTotal > 1 || expensesTotal > 1 ||
-                (paymentsTotal > 0 && expensesTotal > 0);
+            (paymentsTotal > 0 && expensesTotal > 0);
         archiveButton.setEnabled(enableArchive);
 
         // The balance needs to be recalculated if either an expense or payment has changed
@@ -211,18 +195,18 @@ public class MainFrame extends JFrame {
 
         if (netBobBalance > 0) {
             String annOwesBob = String.format("%s owes %s %s",
-                    User.ANN.getName(),
-                    User.BOB.getName(),
-                    formatDecimal(netBobBalance));
+                User.ANN.getName(),
+                User.BOB.getName(),
+                formatDecimal(netBobBalance));
             balanceLabel.setText(annOwesBob);
 
         } else if (netBobBalance < 0) {
 
             // A negative balance indicates Bob owes Ann, but it will be shown as a positive amount
             String bobOwesAnn = String.format("%s owes %s %s",
-                    User.BOB.getName(),
-                    User.ANN.getName(),
-                    formatDecimal(-netBobBalance));
+                User.BOB.getName(),
+                User.ANN.getName(),
+                formatDecimal(-netBobBalance));
 
             balanceLabel.setText(bobOwesAnn);
 
@@ -243,7 +227,7 @@ public class MainFrame extends JFrame {
     private void updateNetBalance() {
         float bobExpenseBalance = 0;
 
-        for (Transaction expense : expensesTableModel.GetAllTransactions()) {
+        for (Transaction expense : expensesTableModel.getAllTransactions()) {
             bobExpenseBalance += expense.getBobPaid() - expense.getAnnPaid();
         }
         LOGGER.debug("Bob's net expenses balance is: {}", bobExpenseBalance);
@@ -251,7 +235,7 @@ public class MainFrame extends JFrame {
         // Get the net difference in payments
         float bobPaymentBalance = 0;
 
-        for (Transaction payment : paymentsTableModel.GetAllTransactions()) {
+        for (Transaction payment : paymentsTableModel.getAllTransactions()) {
             bobPaymentBalance += payment.getBobPaid() - payment.getAnnPaid();
         }
         LOGGER.debug("Bob's net payments balance is: {}", bobPaymentBalance);
@@ -270,7 +254,7 @@ public class MainFrame extends JFrame {
         Transaction selectedExpense = expensesTableModel.getTransaction(selectedRowIndex);
 
         TransactionDialog expenseDialog = new TransactionDialog(this,
-                TranDialogMode.UPDATE_EXPENSE, selectedExpense);
+            TranDialogMode.UPDATE_EXPENSE, selectedExpense);
         GuiUtils.showCentered(expenseDialog);
 
         if (expenseDialog.isValidTransaction()) {
@@ -283,8 +267,8 @@ public class MainFrame extends JFrame {
         Transaction selectedTran = paymentsTableModel.getTransaction(selectedRow);
 
         int answer = JOptionPane.showConfirmDialog(this,
-                "Are you sure you want to delete the selected payment?", "Confirm Deletion",
-                JOptionPane.YES_NO_OPTION);
+            "Are you sure you want to delete the selected payment?", "Confirm Deletion",
+            JOptionPane.YES_NO_OPTION);
 
         if (answer == JOptionPane.YES_OPTION) {
             persistDeletedTransaction(selectedTran);
@@ -295,18 +279,14 @@ public class MainFrame extends JFrame {
         LOGGER.debug("Deleting transaction: {}", tran);
 
         try {
-            if (controller.deleteTransaction(tran.getId())) {
+            trasactionService.deleteTransaction(tran.getId());
 
-                if (tran.getTransactionType() == TransactionType.EXPENSE) {
-                    expensesTableModel.deleteTransaction(tran);
-                    updateUI(TableUpdateType.EXPENSE);
-                } else {
-                    paymentsTableModel.deleteTransaction(tran);
-                    updateUI(TableUpdateType.PAYMENT);
-                }
+            if (tran.getTransactionType() == TransactionType.EXPENSE) {
+                expensesTableModel.deleteTransaction(tran);
+                updateUI(TableUpdateType.EXPENSE);
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to delete transaction",
-                        "Delete Failed", JOptionPane.ERROR_MESSAGE);
+                paymentsTableModel.deleteTransaction(tran);
+                updateUI(TableUpdateType.PAYMENT);
             }
         } catch (RuntimeException ex) {
             handleFatalException(ex);
@@ -318,8 +298,8 @@ public class MainFrame extends JFrame {
         Transaction selectedTran = expensesTableModel.getTransaction(selectedRow);
 
         int answer = JOptionPane.showConfirmDialog(this,
-                "Are you sure you want to delete the selected expense?", "Confirm Deletion",
-                JOptionPane.YES_NO_OPTION);
+            "Are you sure you want to delete the selected expense?", "Confirm Deletion",
+            JOptionPane.YES_NO_OPTION);
 
         if (answer == JOptionPane.YES_OPTION) {
             persistDeletedTransaction(selectedTran);
@@ -336,18 +316,14 @@ public class MainFrame extends JFrame {
         LOGGER.debug("Updated transaction passed validation: {}", tran);
 
         try {
-            if (controller.updateTransaction(tran)) {
+            trasactionService.updateTransaction(tran);
 
-                if (tran.getTransactionType() == TransactionType.EXPENSE) {
-                    expensesTableModel.replaceTransaction(tableRowIndex, tran);
-                    updateUI(TableUpdateType.EXPENSE);
-                } else {
-                    paymentsTableModel.replaceTransaction(tableRowIndex, tran);
-                    updateUI(TableUpdateType.PAYMENT);
-                }
+            if (tran.getTransactionType() == TransactionType.EXPENSE) {
+                expensesTableModel.replaceTransaction(tableRowIndex, tran);
+                updateUI(TableUpdateType.EXPENSE);
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to update transaction",
-                        "Update Failed", JOptionPane.ERROR_MESSAGE);
+                paymentsTableModel.replaceTransaction(tableRowIndex, tran);
+                updateUI(TableUpdateType.PAYMENT);
             }
         } catch (RuntimeException ex) {
             handleFatalException(ex);
@@ -361,7 +337,7 @@ public class MainFrame extends JFrame {
         LOGGER.debug("New transaction passed validation: {}", tran);
 
         try {
-            Transaction persistedTran = controller.insertTransaction(tran);
+            Transaction persistedTran = trasactionService.insertTransaction(tran);
 
             if (tran.getTransactionType() == TransactionType.EXPENSE) {
                 expensesTableModel.addTransaction(persistedTran);
@@ -381,15 +357,15 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel centerPanel = new JPanel();
         getContentPane().add(centerPanel, BorderLayout.CENTER);
-        centerPanel.setPreferredSize(new java.awt.Dimension(500, 300));
+        centerPanel.setPreferredSize(new Dimension(500, 300));
         JSplitPane splitter = new JSplitPane();
         centerPanel.add(splitter);
         JScrollPane expScrollPane = new JScrollPane();
         splitter.add(expScrollPane, JSplitPane.RIGHT);
-        expScrollPane.setPreferredSize(new java.awt.Dimension(409, 275));
+        expScrollPane.setPreferredSize(new Dimension(409, 275));
         JScrollPane pmtScrollPane = new JScrollPane();
         splitter.add(pmtScrollPane, JSplitPane.LEFT);
-        pmtScrollPane.setPreferredSize(new java.awt.Dimension(409, 275));
+        pmtScrollPane.setPreferredSize(new Dimension(409, 275));
 
         expScrollPane.setViewportView(expensesTable);
         expensesTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -405,7 +381,7 @@ public class MainFrame extends JFrame {
         westPanel.setLayout(westPanelLayout);
         westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         getContentPane().add(westPanel, BorderLayout.WEST);
-        westPanel.setPreferredSize(new java.awt.Dimension(94, 309));
+        westPanel.setPreferredSize(new Dimension(94, 309));
 
         westPanel.add(addPmtButton);
         addPmtButton.setName("addPmtButton");
@@ -425,7 +401,7 @@ public class MainFrame extends JFrame {
         eastPanel.setLayout(eastPanelLayout);
         eastPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         getContentPane().add(eastPanel, BorderLayout.EAST);
-        eastPanel.setPreferredSize(new java.awt.Dimension(97, 309));
+        eastPanel.setPreferredSize(new Dimension(97, 309));
 
         eastPanel.add(addExpButton);
         addExpButton.setName("addExpButton");
@@ -456,7 +432,7 @@ public class MainFrame extends JFrame {
 
         southPanel.add(this.balanceLabel);
         this.balanceLabel.setName("balanceLabel");
-        this.balanceLabel.setPreferredSize(new java.awt.Dimension(370, 14));
+        this.balanceLabel.setPreferredSize(new Dimension(370, 14));
 
         JPanel northPanel = new JPanel();
         BorderLayout northPanelLayout = new BorderLayout();
@@ -516,7 +492,7 @@ public class MainFrame extends JFrame {
 
             if (answer == JOptionPane.YES_OPTION) {
                 GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
-                controller.archiveTransactions(this.netBobBalance);
+                trasactionService.archiveTransactions(this.netBobBalance);
 
                 // Refresh the list of payments and expenses. At most, a single balancing
                 // payment should be returned
@@ -531,9 +507,13 @@ public class MainFrame extends JFrame {
     }
 
     private void handleFatalException(Exception ex) {
-        LOGGER.fatal("Fatal error occurred", ex);
-        JOptionPane.showMessageDialog(this,
-                "An unexpected error occurred.\nPlease consult the logs for further information.", "Fatal Error",
-                JOptionPane.ERROR_MESSAGE);
+        LOGGER.error("Fatal error occurred", ex);
+        JOptionPane.showMessageDialog(this, """
+            An unexpected error occurred.
+            Please consult the logs for further information.""", "Fatal Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private enum TableUpdateType {
+        PAYMENT, EXPENSE, BOTH
     }
 }
