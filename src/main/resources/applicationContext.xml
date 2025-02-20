@@ -38,8 +38,4 @@
     <bean id="controller" class="iou.controller.ControllerImpl">
         <constructor-arg ref="transactionDao"/>
     </bean>
-
-    <bean class="iou.gui.MainFrame" lazy-init="true">
-        <constructor-arg ref="controller"/>
-    </bean>
 </beans>

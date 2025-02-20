@@ -54,7 +54,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
                 // Close this window and open the main window instead
                 dispose();
-                applicationContext.getBean(MainFrame.class);
+                new MainFrame(controller);
 
             } catch (Exception ex) {
                 LOGGER.error("Login failed for user: {}", username, ex);
