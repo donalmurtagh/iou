@@ -1,6 +1,6 @@
 package iou.gui;
 
-import iou.controller.Controller;
+import iou.beans.TrasactionService;
 import iou.enums.ExpenseField;
 import iou.enums.PaymentField;
 import iou.enums.TranDialogMode;
@@ -31,6 +31,7 @@ import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -66,7 +67,7 @@ public class MainFrame extends JFrame {
 
     private TransactionTableModel expensesTableModel;
 
-    private final Controller controller;
+    private final TrasactionService trasactionService;
 
     private TransactionTableModel paymentsTableModel;
 
@@ -83,9 +84,9 @@ public class MainFrame extends JFrame {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MainFrame.class);
 
-    public MainFrame(Controller controller) {
+    public MainFrame(TrasactionService trasactionService) {
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
-        this.controller = controller;
+        this.trasactionService = trasactionService;
         initUI();
 
         try {
@@ -107,13 +108,13 @@ public class MainFrame extends JFrame {
     private void loadData() {
         try {
             // Get all the expenses
-            List<Transaction> expenses = controller.getTransactions(TransactionType.EXPENSE);
+            List<Transaction> expenses = trasactionService.getTransactions(TransactionType.EXPENSE);
             LOGGER.debug("Retrieved initial list of {} expenses", expenses.size());
             expensesTableModel = new ExpenseTableModel(expenses);
             expensesTable.setModel(expensesTableModel);
 
             // Get all the payments
-            List<Transaction> payments = controller.getTransactions(TransactionType.PAYMENT);
+            List<Transaction> payments = trasactionService.getTransactions(TransactionType.PAYMENT);
             LOGGER.debug("Retrieved initial list of {} payments", payments.size());
             paymentsTableModel = new PaymentTableModel(payments);
             paymentsTable.setModel(paymentsTableModel);
@@ -295,7 +296,7 @@ public class MainFrame extends JFrame {
         LOGGER.debug("Deleting transaction: {}", tran);
 
         try {
-            if (controller.deleteTransaction(tran.getId())) {
+            if (trasactionService.deleteTransaction(tran.getId())) {
 
                 if (tran.getTransactionType() == TransactionType.EXPENSE) {
                     expensesTableModel.deleteTransaction(tran);
@@ -336,7 +337,7 @@ public class MainFrame extends JFrame {
         LOGGER.debug("Updated transaction passed validation: {}", tran);
 
         try {
-            if (controller.updateTransaction(tran)) {
+            if (trasactionService.updateTransaction(tran)) {
 
                 if (tran.getTransactionType() == TransactionType.EXPENSE) {
                     expensesTableModel.replaceTransaction(tableRowIndex, tran);
@@ -361,7 +362,7 @@ public class MainFrame extends JFrame {
         LOGGER.debug("New transaction passed validation: {}", tran);
 
         try {
-            Transaction persistedTran = controller.insertTransaction(tran);
+            Transaction persistedTran = trasactionService.insertTransaction(tran);
 
             if (tran.getTransactionType() == TransactionType.EXPENSE) {
                 expensesTableModel.addTransaction(persistedTran);
@@ -381,15 +382,15 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel centerPanel = new JPanel();
         getContentPane().add(centerPanel, BorderLayout.CENTER);
-        centerPanel.setPreferredSize(new java.awt.Dimension(500, 300));
+        centerPanel.setPreferredSize(new Dimension(500, 300));
         JSplitPane splitter = new JSplitPane();
         centerPanel.add(splitter);
         JScrollPane expScrollPane = new JScrollPane();
         splitter.add(expScrollPane, JSplitPane.RIGHT);
-        expScrollPane.setPreferredSize(new java.awt.Dimension(409, 275));
+        expScrollPane.setPreferredSize(new Dimension(409, 275));
         JScrollPane pmtScrollPane = new JScrollPane();
         splitter.add(pmtScrollPane, JSplitPane.LEFT);
-        pmtScrollPane.setPreferredSize(new java.awt.Dimension(409, 275));
+        pmtScrollPane.setPreferredSize(new Dimension(409, 275));
 
         expScrollPane.setViewportView(expensesTable);
         expensesTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -405,7 +406,7 @@ public class MainFrame extends JFrame {
         westPanel.setLayout(westPanelLayout);
         westPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         getContentPane().add(westPanel, BorderLayout.WEST);
-        westPanel.setPreferredSize(new java.awt.Dimension(94, 309));
+        westPanel.setPreferredSize(new Dimension(94, 309));
 
         westPanel.add(addPmtButton);
         addPmtButton.setName("addPmtButton");
@@ -425,7 +426,7 @@ public class MainFrame extends JFrame {
         eastPanel.setLayout(eastPanelLayout);
         eastPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         getContentPane().add(eastPanel, BorderLayout.EAST);
-        eastPanel.setPreferredSize(new java.awt.Dimension(97, 309));
+        eastPanel.setPreferredSize(new Dimension(97, 309));
 
         eastPanel.add(addExpButton);
         addExpButton.setName("addExpButton");
@@ -456,7 +457,7 @@ public class MainFrame extends JFrame {
 
         southPanel.add(this.balanceLabel);
         this.balanceLabel.setName("balanceLabel");
-        this.balanceLabel.setPreferredSize(new java.awt.Dimension(370, 14));
+        this.balanceLabel.setPreferredSize(new Dimension(370, 14));
 
         JPanel northPanel = new JPanel();
         BorderLayout northPanelLayout = new BorderLayout();
@@ -516,7 +517,7 @@ public class MainFrame extends JFrame {
 
             if (answer == JOptionPane.YES_OPTION) {
                 GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
-                controller.archiveTransactions(this.netBobBalance);
+                trasactionService.archiveTransactions(this.netBobBalance);
 
                 // Refresh the list of payments and expenses. At most, a single balancing
                 // payment should be returned
@@ -532,8 +533,8 @@ public class MainFrame extends JFrame {
 
     private void handleFatalException(Exception ex) {
         LOGGER.error("Fatal error occurred", ex);
-        JOptionPane.showMessageDialog(this,
-                "An unexpected error occurred.\nPlease consult the logs for further information.", "Fatal Error",
-                JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, """
+                An unexpected error occurred.
+                Please consult the logs for further information.""", "Fatal Error", JOptionPane.ERROR_MESSAGE);
     }
 }

@@ -1,6 +1,6 @@
 package iou.gui;
 
-import iou.controller.Controller;
+import iou.beans.TrasactionService;
 import iou.enums.User;
 import iou.util.GuiUtils;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -42,7 +42,7 @@ public class LoginFrame extends javax.swing.JFrame {
             String username = currentUser.getUsername();
             String password = new String(passwordField.getPassword());
 
-            Controller controller = applicationContext.getBean(Controller.class);
+            TrasactionService trasactionService = applicationContext.getBean(TrasactionService.class);
             BasicDataSource dataSource = applicationContext.getBean(BasicDataSource.class);
             dataSource.setUsername(username);
             dataSource.setPassword(password);
@@ -50,11 +50,11 @@ public class LoginFrame extends javax.swing.JFrame {
             LOGGER.debug("Attempting to login with username: {}", username);
 
             try {
-                controller.login(username, password);
+                trasactionService.login(username, password);
 
                 // Close this window and open the main window instead
                 dispose();
-                new MainFrame(controller);
+                new MainFrame(trasactionService);
 
             } catch (Exception ex) {
                 LOGGER.error("Login failed for user: {}", username, ex);

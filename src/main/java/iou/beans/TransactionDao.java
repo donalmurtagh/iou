@@ -1,4 +1,4 @@
-package iou.controller;
+package iou.beans;
 
 import iou.enums.TransactionType;
 import iou.model.Transaction;

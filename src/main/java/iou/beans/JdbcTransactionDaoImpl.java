@@ -1,4 +1,4 @@
-package iou.controller;
+package iou.beans;
 
 import iou.enums.TransactionType;
 import iou.model.Expense;
@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Date;
@@ -20,6 +21,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 
+@Repository
 public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements TransactionDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JdbcTransactionDaoImpl.class);

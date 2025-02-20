@@ -1,17 +1,19 @@
-package iou.controller;
+package iou.beans;
 
 import iou.enums.TransactionType;
 import iou.model.Payment;
 import iou.model.Transaction;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
-public class ControllerImpl implements Controller {
+@Service
+public class TransactionServiceImpl implements TrasactionService {
 
     private final TransactionDao transactionDao;
 
-    public ControllerImpl(TransactionDao transactionDao) {
+    public TransactionServiceImpl(TransactionDao transactionDao) {
         this.transactionDao = transactionDao;
     }
 
