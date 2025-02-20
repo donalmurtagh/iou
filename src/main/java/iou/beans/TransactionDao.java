@@ -13,9 +13,9 @@ public interface TransactionDao {
 
     Transaction insertTransaction(final Transaction tran);
 
-    boolean deleteTransaction(Long id);
+    void deleteTransaction(Long id);
 
-    boolean updateTransaction(Transaction tran);
+    void updateTransaction(Transaction tran);
 
     void archiveTransactions();
 }

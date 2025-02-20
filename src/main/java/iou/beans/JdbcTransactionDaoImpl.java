@@ -6,7 +6,7 @@ import iou.model.Payment;
 import iou.model.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.JdbcUpdateAffectedIncorrectNumberOfRowsException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -34,14 +34,21 @@ public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements Transactio
     }
 
     @Override
-    public boolean deleteTransaction(Long id) {
-        int rowsAffected = getJdbcTemplate().update("delete from transaction where id = ?", id);
-        LOGGER.debug("Rows affected by delete: {}", rowsAffected);
-        return rowsAffected == 1;
+    public void deleteTransaction(Long id) {
+        var sql = "delete from transaction where id = ?";
+        int rowsAffected = getJdbcTemplate().update(sql, id);
+        if (rowsAffected != 1) {
+            throw new JdbcUpdateAffectedIncorrectNumberOfRowsException(sql, 1, rowsAffected);
+        }
     }
 
     @Override
-    public boolean updateTransaction(Transaction tran) {
+    public void updateTransaction(Transaction tran) {
+        var sql = """
+            update transaction
+            set type = ?, tran_date = ?, description = ?, ann_paid = ?, bob_paid = ?
+            where id = ?""";
+
         Object[] params = {
             tran.getTransactionType().toString(),
             tran.getDate(),
@@ -50,11 +57,10 @@ public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements Transactio
             tran.getBobPaid(),
             tran.getId()
         };
-        int rowsUpdated = getJdbcTemplate().update("""
-                    update transaction
-                    set type = ?, tran_date = ?, description = ?, ann_paid = ?, bob_paid = ?
-                    where id = ?""", params);
-        return rowsUpdated == 1;
+        int rowsUpdated = getJdbcTemplate().update(sql, params);
+        if (rowsUpdated != 1) {
+            throw new JdbcUpdateAffectedIncorrectNumberOfRowsException(sql, 1, rowsUpdated);
+        }
     }
 
     @Override
@@ -63,8 +69,8 @@ public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements Transactio
         KeyHolder keyHolder = new GeneratedKeyHolder();
         getJdbcTemplate().update(connection -> {
             PreparedStatement ps = connection.prepareStatement("""
-                    insert into transaction (type, tran_date, description, ann_paid, bob_paid)
-                    values(?, ?, ?, ?, ?)""", Statement.RETURN_GENERATED_KEYS);
+                insert into transaction (type, tran_date, description, ann_paid, bob_paid)
+                values(?, ?, ?, ?, ?)""", Statement.RETURN_GENERATED_KEYS);
 
             Date sqlDate = new Date(tran.getDate().getTime());
             ps.setString(1, tran.getTransactionType().toString());
@@ -102,10 +108,10 @@ public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements Transactio
     @Override
     public List<Transaction> getTransactions(TransactionType type) {
         return getJdbcTemplate().query("""
-                select id, type, tran_date, description, ann_paid, bob_paid
-                from transaction
-                where archived = 0
-                and type = ?""", rowMapper, type.toString());
+            select id, type, tran_date, description, ann_paid, bob_paid
+            from transaction
+            where archived = 0
+            and type = ?""", rowMapper, type.toString());
     }
 
     @Override

@@ -33,13 +33,13 @@ public class TransactionServiceImpl implements TrasactionService {
     }
 
     @Override
-    public boolean updateTransaction(Transaction tran) {
-        return transactionDao.updateTransaction(tran);
+    public void updateTransaction(Transaction tran) {
+        transactionDao.updateTransaction(tran);
     }
 
     @Override
-    public boolean deleteTransaction(Long id) {
-        return transactionDao.deleteTransaction(id);
+    public void deleteTransaction(Long id) {
+        transactionDao.deleteTransaction(id);
     }
 
     @Override

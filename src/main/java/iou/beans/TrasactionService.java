@@ -13,9 +13,9 @@ public interface TrasactionService {
 
     Transaction insertTransaction(Transaction tran);
 
-    boolean updateTransaction(Transaction tran);
+    void updateTransaction(Transaction tran);
 
-    boolean deleteTransaction(Long id);
+    void deleteTransaction(Long id);
 
     /**
      * Archive all existing transactions and insert a payment transaction that

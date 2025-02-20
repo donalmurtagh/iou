@@ -136,7 +136,7 @@ public class MainFrame extends JFrame {
         Transaction selectedPayment = paymentsTableModel.getTransaction(selectedRowIndex);
 
         TransactionDialog paymentDialog = new TransactionDialog(this,
-                TranDialogMode.UPDATE_PAYMENT, selectedPayment);
+            TranDialogMode.UPDATE_PAYMENT, selectedPayment);
         GuiUtils.showCentered(paymentDialog);
 
         if (paymentDialog.isValidTransaction()) {
@@ -146,7 +146,7 @@ public class MainFrame extends JFrame {
 
     private void showAddPaymentDialog() {
         TransactionDialog paymentDialog = new TransactionDialog(this,
-                TranDialogMode.ADD_PAYMENT, new Payment());
+            TranDialogMode.ADD_PAYMENT, new Payment());
         GuiUtils.showCentered(paymentDialog);
 
         if (paymentDialog.isValidTransaction()) {
@@ -159,7 +159,7 @@ public class MainFrame extends JFrame {
      */
     private void showAddExpenseDialog() {
         TransactionDialog expenseDialog = new TransactionDialog(this,
-                TranDialogMode.ADD_EXPENSE, new Expense());
+            TranDialogMode.ADD_EXPENSE, new Expense());
         GuiUtils.showCentered(expenseDialog);
 
         if (expenseDialog.isValidTransaction()) {
@@ -204,7 +204,7 @@ public class MainFrame extends JFrame {
         int paymentsTotal = paymentsTable.getRowCount();
         int expensesTotal = expensesTable.getRowCount();
         boolean enableArchive = paymentsTotal > 1 || expensesTotal > 1 ||
-                (paymentsTotal > 0 && expensesTotal > 0);
+            (paymentsTotal > 0 && expensesTotal > 0);
         archiveButton.setEnabled(enableArchive);
 
         // The balance needs to be recalculated if either an expense or payment has changed
@@ -212,18 +212,18 @@ public class MainFrame extends JFrame {
 
         if (netBobBalance > 0) {
             String annOwesBob = String.format("%s owes %s %s",
-                    User.ANN.getName(),
-                    User.BOB.getName(),
-                    formatDecimal(netBobBalance));
+                User.ANN.getName(),
+                User.BOB.getName(),
+                formatDecimal(netBobBalance));
             balanceLabel.setText(annOwesBob);
 
         } else if (netBobBalance < 0) {
 
             // A negative balance indicates Bob owes Ann, but it will be shown as a positive amount
             String bobOwesAnn = String.format("%s owes %s %s",
-                    User.BOB.getName(),
-                    User.ANN.getName(),
-                    formatDecimal(-netBobBalance));
+                User.BOB.getName(),
+                User.ANN.getName(),
+                formatDecimal(-netBobBalance));
 
             balanceLabel.setText(bobOwesAnn);
 
@@ -271,7 +271,7 @@ public class MainFrame extends JFrame {
         Transaction selectedExpense = expensesTableModel.getTransaction(selectedRowIndex);
 
         TransactionDialog expenseDialog = new TransactionDialog(this,
-                TranDialogMode.UPDATE_EXPENSE, selectedExpense);
+            TranDialogMode.UPDATE_EXPENSE, selectedExpense);
         GuiUtils.showCentered(expenseDialog);
 
         if (expenseDialog.isValidTransaction()) {
@@ -284,8 +284,8 @@ public class MainFrame extends JFrame {
         Transaction selectedTran = paymentsTableModel.getTransaction(selectedRow);
 
         int answer = JOptionPane.showConfirmDialog(this,
-                "Are you sure you want to delete the selected payment?", "Confirm Deletion",
-                JOptionPane.YES_NO_OPTION);
+            "Are you sure you want to delete the selected payment?", "Confirm Deletion",
+            JOptionPane.YES_NO_OPTION);
 
         if (answer == JOptionPane.YES_OPTION) {
             persistDeletedTransaction(selectedTran);
@@ -296,18 +296,14 @@ public class MainFrame extends JFrame {
         LOGGER.debug("Deleting transaction: {}", tran);
 
         try {
-            if (trasactionService.deleteTransaction(tran.getId())) {
+            trasactionService.deleteTransaction(tran.getId());
 
-                if (tran.getTransactionType() == TransactionType.EXPENSE) {
-                    expensesTableModel.deleteTransaction(tran);
-                    updateUI(TableUpdateType.EXPENSE);
-                } else {
-                    paymentsTableModel.deleteTransaction(tran);
-                    updateUI(TableUpdateType.PAYMENT);
-                }
+            if (tran.getTransactionType() == TransactionType.EXPENSE) {
+                expensesTableModel.deleteTransaction(tran);
+                updateUI(TableUpdateType.EXPENSE);
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to delete transaction",
-                        "Delete Failed", JOptionPane.ERROR_MESSAGE);
+                paymentsTableModel.deleteTransaction(tran);
+                updateUI(TableUpdateType.PAYMENT);
             }
         } catch (RuntimeException ex) {
             handleFatalException(ex);
@@ -319,8 +315,8 @@ public class MainFrame extends JFrame {
         Transaction selectedTran = expensesTableModel.getTransaction(selectedRow);
 
         int answer = JOptionPane.showConfirmDialog(this,
-                "Are you sure you want to delete the selected expense?", "Confirm Deletion",
-                JOptionPane.YES_NO_OPTION);
+            "Are you sure you want to delete the selected expense?", "Confirm Deletion",
+            JOptionPane.YES_NO_OPTION);
 
         if (answer == JOptionPane.YES_OPTION) {
             persistDeletedTransaction(selectedTran);
@@ -337,18 +333,14 @@ public class MainFrame extends JFrame {
         LOGGER.debug("Updated transaction passed validation: {}", tran);
 
         try {
-            if (trasactionService.updateTransaction(tran)) {
+            trasactionService.updateTransaction(tran);
 
-                if (tran.getTransactionType() == TransactionType.EXPENSE) {
-                    expensesTableModel.replaceTransaction(tableRowIndex, tran);
-                    updateUI(TableUpdateType.EXPENSE);
-                } else {
-                    paymentsTableModel.replaceTransaction(tableRowIndex, tran);
-                    updateUI(TableUpdateType.PAYMENT);
-                }
+            if (tran.getTransactionType() == TransactionType.EXPENSE) {
+                expensesTableModel.replaceTransaction(tableRowIndex, tran);
+                updateUI(TableUpdateType.EXPENSE);
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to update transaction",
-                        "Update Failed", JOptionPane.ERROR_MESSAGE);
+                paymentsTableModel.replaceTransaction(tableRowIndex, tran);
+                updateUI(TableUpdateType.PAYMENT);
             }
         } catch (RuntimeException ex) {
             handleFatalException(ex);
@@ -534,7 +526,7 @@ public class MainFrame extends JFrame {
     private void handleFatalException(Exception ex) {
         LOGGER.error("Fatal error occurred", ex);
         JOptionPane.showMessageDialog(this, """
-                An unexpected error occurred.
-                Please consult the logs for further information.""", "Fatal Error", JOptionPane.ERROR_MESSAGE);
+            An unexpected error occurred.
+            Please consult the logs for further information.""", "Fatal Error", JOptionPane.ERROR_MESSAGE);
     }
 }
