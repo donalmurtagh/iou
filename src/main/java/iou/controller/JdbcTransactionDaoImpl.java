@@ -6,8 +6,8 @@ import iou.model.Payment;
 import iou.model.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -134,7 +134,7 @@ public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements Transactio
     /**
      * An object that maps rows in the transaction table to Transaction objects
      */
-    private final ParameterizedRowMapper<Transaction> rowMapper = (rs, rowNum) -> {
+    private final RowMapper<Transaction> rowMapper = (rs, rowNum) -> {
         Transaction tran;
 
         if (rs.getString("type").equals(TransactionType.EXPENSE.toString())) {
