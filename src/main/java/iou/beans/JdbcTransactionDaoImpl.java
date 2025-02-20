@@ -22,7 +22,25 @@ import java.util.List;
 @Repository
 public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements TransactionDao {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcTransactionDaoImpl.class);
+    /**
+     * An object that maps rows in the transaction table to Transaction objects
+     */
+    private final RowMapper<Transaction> rowMapper = (rs, rowNum) -> {
+        Transaction tran;
+
+        if (rs.getString("type").equals(TransactionType.EXPENSE.toString())) {
+            tran = new Expense();
+        } else {
+            tran = new Payment();
+        }
+
+        tran.setId(rs.getLong("id"));
+        tran.setDate(rs.getDate("tran_date"));
+        tran.setDescription(rs.getString("description"));
+        tran.setBobPaid(rs.getFloat("bob_paid"));
+        tran.setAnnPaid(rs.getFloat("ann_paid"));
+        return tran;
+    };
 
     public JdbcTransactionDaoImpl(DataSource dataSource) {
         super.setDataSource(dataSource);
@@ -84,26 +102,6 @@ public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements Transactio
         tran.setId(keyHolder.getKey().longValue());
         return tran;
     }
-
-    /**
-     * An object that maps rows in the transaction table to Transaction objects
-     */
-    private final RowMapper<Transaction> rowMapper = (rs, rowNum) -> {
-        Transaction tran;
-
-        if (rs.getString("type").equals(TransactionType.EXPENSE.toString())) {
-            tran = new Expense();
-        } else {
-            tran = new Payment();
-        }
-
-        tran.setId(rs.getLong("id"));
-        tran.setDate(rs.getDate("tran_date"));
-        tran.setDescription(rs.getString("description"));
-        tran.setBobPaid(rs.getFloat("bob_paid"));
-        tran.setAnnPaid(rs.getFloat("ann_paid"));
-        return tran;
-    };
 
     @Override
     public List<Transaction> getTransactions(TransactionType type) {

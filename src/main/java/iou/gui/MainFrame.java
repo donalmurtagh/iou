@@ -45,44 +45,27 @@ import java.util.Properties;
  */
 public class MainFrame extends JFrame {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainFrame.class);
+
     private final JButton editPmtButton = new JButton();
-
-    private JButton archiveButton;
-
     private final JLabel balanceLabel = new JLabel();
-
     private final JButton addExpButton = new JButton();
-
     private final JButton deleteExpButton = new JButton();
-
     private final JButton deletePmtButton = new JButton();
-
     private final JTable expensesTable = new TransactionTable();
-
     private final JTable paymentsTable = new TransactionTable();
-
     private final JButton editExpButton = new JButton();
-
     private final JButton addPmtButton = new JButton();
-
-    private TransactionTableModel expensesTableModel;
-
     private final TrasactionService trasactionService;
-
+    private JButton archiveButton;
+    private TransactionTableModel expensesTableModel;
     private TransactionTableModel paymentsTableModel;
-
     private NumberFormat currencyFormatter;
 
     /**
      * If positive, Ann owes Bob, and vice versa
      */
     private float netBobBalance;
-
-    private enum TableUpdateType {
-        PAYMENT, EXPENSE, BOTH
-    }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MainFrame.class);
 
     public MainFrame(TrasactionService trasactionService) {
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
@@ -103,6 +86,21 @@ public class MainFrame extends JFrame {
         } finally {
             GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
         }
+    }
+
+    /**
+     * Updates the visual state of a table and it's associated edit and delete buttons
+     *
+     * @param table
+     * @param editButton
+     * @param deleteButton
+     */
+    private static void updateTableAndButtonsUI(JTable table, JButton editButton, JButton deleteButton) {
+        table.updateUI();
+        boolean rowsExist = (table.getModel().getRowCount() > 0);
+        deleteButton.setEnabled(rowsExist);
+        editButton.setEnabled(rowsExist);
+        GuiUtils.selectLastRow(table);
     }
 
     private void loadData() {
@@ -168,21 +166,6 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * Updates the visual state of a table and it's associated edit and delete buttons
-     *
-     * @param table
-     * @param editButton
-     * @param deleteButton
-     */
-    private static void updateTableAndButtonsUI(JTable table, JButton editButton, JButton deleteButton) {
-        table.updateUI();
-        boolean rowsExist = (table.getModel().getRowCount() > 0);
-        deleteButton.setEnabled(rowsExist);
-        editButton.setEnabled(rowsExist);
-        GuiUtils.selectLastRow(table);
-    }
-
-    /**
      * Updates the table(s), the enabled state of the buttons and recalculates the balance
      *
      * @param updateType Indicates which set of transactions has changed
@@ -244,7 +227,7 @@ public class MainFrame extends JFrame {
     private void updateNetBalance() {
         float bobExpenseBalance = 0;
 
-        for (Transaction expense : expensesTableModel.GetAllTransactions()) {
+        for (Transaction expense : expensesTableModel.getAllTransactions()) {
             bobExpenseBalance += expense.getBobPaid() - expense.getAnnPaid();
         }
         LOGGER.debug("Bob's net expenses balance is: {}", bobExpenseBalance);
@@ -252,7 +235,7 @@ public class MainFrame extends JFrame {
         // Get the net difference in payments
         float bobPaymentBalance = 0;
 
-        for (Transaction payment : paymentsTableModel.GetAllTransactions()) {
+        for (Transaction payment : paymentsTableModel.getAllTransactions()) {
             bobPaymentBalance += payment.getBobPaid() - payment.getAnnPaid();
         }
         LOGGER.debug("Bob's net payments balance is: {}", bobPaymentBalance);
@@ -528,5 +511,9 @@ public class MainFrame extends JFrame {
         JOptionPane.showMessageDialog(this, """
             An unexpected error occurred.
             Please consult the logs for further information.""", "Fatal Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private enum TableUpdateType {
+        PAYMENT, EXPENSE, BOTH
     }
 }

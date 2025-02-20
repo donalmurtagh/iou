@@ -18,20 +18,20 @@ public abstract class Transaction {
         this.type = type;
     }
 
-    public void setAnnPaid(float amount) {
-        this.annPaid = amount;
+    public float getBobPaid() {
+        return bobPaid;
     }
 
     public void setBobPaid(float amount) {
         this.bobPaid = amount;
     }
 
-    public float getBobPaid() {
-        return bobPaid;
-    }
-
     public float getAnnPaid() {
         return annPaid;
+    }
+
+    public void setAnnPaid(float amount) {
+        this.annPaid = amount;
     }
 
     public long getId() {
@@ -65,7 +65,7 @@ public abstract class Transaction {
     @Override
     public String toString() {
         return String.format("id=%s, description=%s, date=%s, ann paid=%s, bob paid=%s",
-                id, description, date, annPaid, bobPaid);
+            id, description, date, annPaid, bobPaid);
     }
 
     @Override

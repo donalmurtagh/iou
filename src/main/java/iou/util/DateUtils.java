@@ -10,26 +10,24 @@ import java.util.Date;
 
 public final class DateUtils {
 
-    private static final DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy");
-
     private static final Logger LOGGER = LoggerFactory.getLogger(DateUtils.class);
-
-    static {
-        dateFormatter.setLenient(false);
-    }
 
     private DateUtils() {
     }
 
-    public static Date string2Date(String str) throws ParseException {
+    private static DateFormat getDateFormatter() {
+        DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy");
+        dateFormatter.setLenient(false);
+        return dateFormatter;
+    }
 
-        LOGGER.debug("Parsing date string: {}", str);
-        Date date = dateFormatter.parse(str);
-        LOGGER.debug("Converted to date: {}", date);
+    public static Date string2Date(String string) throws ParseException {
+        Date date = getDateFormatter().parse(string);
+        LOGGER.debug("Converted text '{}' to date: {}", string, date);
         return date;
     }
 
     public static String date2String(Date date) {
-        return dateFormatter.format(date);
+        return getDateFormatter().format(date);
     }
 }

@@ -75,8 +75,7 @@ public class PaymentTableModel extends TransactionTableModel {
      * @param rowIndex    The specified row index number
      * @param columnIndex The specified column index number
      * @return The object to show in the specified cell. The displayed value
-     *         will the result of calling <code>toString</code> on this
-     *         object.
+     * will be the result of calling <code>toString</code> on this object.
      */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -98,7 +97,7 @@ public class PaymentTableModel extends TransactionTableModel {
 
             } else {
                 throw new RuntimeException("Could not determine payee for record ID: "
-                        + payment.getId());
+                    + payment.getId());
             }
 
         } else if (columnIndex == PaymentField.AMOUNT.getIndex()) {
@@ -111,7 +110,7 @@ public class PaymentTableModel extends TransactionTableModel {
 
             } else {
                 throw new RuntimeException("Could not determine payee for record ID: "
-                        + payment.getId());
+                    + payment.getId());
             }
 
         } else {

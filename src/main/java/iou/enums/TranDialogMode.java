@@ -6,7 +6,7 @@ public enum TranDialogMode {
     ADD_EXPENSE("Add Expense"),
     UPDATE_EXPENSE("Update Expense");
 
-    private String title;
+    private final String title;
 
     TranDialogMode(String title) {
         this.title = title;

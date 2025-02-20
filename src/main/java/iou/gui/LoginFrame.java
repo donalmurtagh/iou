@@ -32,6 +32,23 @@ public class LoginFrame extends javax.swing.JFrame {
 
     private JRadioButton annButton;
 
+    public LoginFrame() {
+        super("Login to IOU");
+        this.setResizable(false);
+        initGUI();
+    }
+
+    /**
+     * Auto-generated main method to display this JFrame
+     */
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            LoginFrame inst = new LoginFrame();
+            inst.setLocationRelativeTo(null);
+            inst.setVisible(true);
+        });
+    }
+
     private void doLogin() {
 
         // Change the cursor to an hourglass
@@ -63,29 +80,12 @@ public class LoginFrame extends javax.swing.JFrame {
                         - Password typed incorrectly
                         - MySQL is not running
                         - Database is not initialized""",
-                        "Login Error", JOptionPane.ERROR_MESSAGE);
+                    "Login Error", JOptionPane.ERROR_MESSAGE);
             }
         } finally {
             // Change the cursor back
             GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
         }
-    }
-
-    /**
-     * Auto-generated main method to display this JFrame
-     */
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            LoginFrame inst = new LoginFrame();
-            inst.setLocationRelativeTo(null);
-            inst.setVisible(true);
-        });
-    }
-
-    public LoginFrame() {
-        super("Login to IOU");
-        this.setResizable(false);
-        initGUI();
     }
 
     private void initGUI() {

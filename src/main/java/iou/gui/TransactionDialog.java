@@ -32,24 +32,16 @@ import java.util.Date;
 
 public class TransactionDialog extends JDialog {
 
-    private JTextField descField;
-
     private static final float MAX_AMOUNT = 10000;
-
-    private JFormattedTextField dateField;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionDialog.class);
     private final Transaction tran;
-
     // TODO Add decimal masks to these fields
     private final JTextField bobField = new JTextField();
-
     private final JTextField annField = new JTextField();
-
-    private boolean isValidTransaction = false;
-
     private final TranDialogMode mode;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionDialog.class);
+    private JTextField descField;
+    private JFormattedTextField dateField;
+    private boolean isValidTransaction = false;
 
     /**
      * Shows this dialog in modal mode
@@ -74,6 +66,20 @@ public class TransactionDialog extends JDialog {
         this.mode = mode;
         this.tran = tran;
         initGUI();
+    }
+
+    private static float validateAmount(String amountStr) {
+
+        if (StringUtils.isBlank(amountStr)) {
+            return 0;
+        }
+
+        float amount = Float.parseFloat(amountStr);
+
+        if (amount <= 0 || amount >= MAX_AMOUNT) {
+            throw new NumberFormatException(amountStr + " is out of range");
+        }
+        return amount;
     }
 
     public Transaction getTransaction() {
@@ -105,56 +111,44 @@ public class TransactionDialog extends JDialog {
         if (StringUtils.isBlank(annField.getText()) && StringUtils.isBlank(bobField.getText())) {
 
             String missingPayeeMsg = String.format("Please enter an amount in either '%s Paid' or '%s Paid'",
-                    User.ANN.getName(),
-                    User.BOB.getName());
+                User.ANN.getName(),
+                User.BOB.getName());
             JOptionPane.showMessageDialog(this, missingPayeeMsg, "Missing Amount", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
+        var dateFieldText = dateField.getText();
         try {
-            if (StringUtils.isNotBlank(dateField.getText())) {
-                LOGGER.debug("Date field contains text: {}", dateField.getText());
-                Date parsedDate = DateUtils.string2Date(dateField.getText());
+            if (StringUtils.isNotBlank(dateFieldText)) {
+                LOGGER.debug("Date field contains text: {}", dateFieldText);
+                Date parsedDate = DateUtils.string2Date(dateFieldText);
                 LOGGER.debug("Parsed date is: {}", parsedDate);
 
-                tran.setDate(DateUtils.string2Date(dateField.getText()));
+                tran.setDate(DateUtils.string2Date(dateFieldText));
             }
             tran.setDescription(descField.getText());
             tran.setAnnPaid(validateAmount(annField.getText()));
             tran.setBobPaid(validateAmount(bobField.getText()));
-
             return true;
 
         } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, dateField.getText()
-                    + " is not a valid date.\n"
+            LOGGER.error("Failed to parse date string", e);
+
+            JOptionPane.showMessageDialog(this,
+                dateFieldText + " is not a valid date.\n"
                     + "If a date is entered, it must be in the format 'dd/MM/yy'.",
-                    "Invalid Date", JOptionPane.ERROR_MESSAGE);
+                "Invalid Date", JOptionPane.ERROR_MESSAGE);
             return false;
 
         } catch (NumberFormatException e) {
-            LOGGER.info("Number validation failed", e);
+            LOGGER.error("Number validation failed", e);
 
             JOptionPane.showMessageDialog(this,
-                    "Please enter a valid decimal greater than 0 and less than " + MAX_AMOUNT
-                            + " in the amount field(s)", "Invalid Amount",
-                    JOptionPane.ERROR_MESSAGE);
+                "Please enter a valid decimal greater than 0 and less than " + MAX_AMOUNT
+                    + " in the amount field(s)", "Invalid Amount",
+                JOptionPane.ERROR_MESSAGE);
             return false;
         }
-    }
-
-    private static float validateAmount(String amountStr) {
-
-        if (StringUtils.isBlank(amountStr)) {
-            return 0;
-        }
-
-        float amount = Float.parseFloat(amountStr);
-
-        if (amount <= 0 || amount >= MAX_AMOUNT) {
-            throw new NumberFormatException(amountStr + " is out of range");
-        }
-        return amount;
     }
 
     private void initGUI() {
@@ -191,9 +185,9 @@ public class TransactionDialog extends JDialog {
             JPanel formPanel = new JPanel();
 
             FormLayout formLayout = new FormLayout(
-                    // columns, rows
-                    "max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu)",
-                    "max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu)");
+                // columns, rows
+                "max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu)",
+                "max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu), max(p;5dlu)");
 
             formPanel.setLayout(formLayout);
             getContentPane().add(formPanel, BorderLayout.CENTER);
@@ -215,7 +209,8 @@ public class TransactionDialog extends JDialog {
             formPanel.add(descField, new CellConstraints("4, 4, 1, 1, default, default"));
             descField.setText(tran.getDescription());
 
-            formPanel.add(createPersonLabel(User.ANN.getName() + " Paid:"), new CellConstraints("2, 6, 1, 1, default, default"));
+            formPanel.add(createPersonLabel(User.ANN.getName() + " Paid:"),
+                new CellConstraints("2, 6, 1, 1, default, default"));
 
             formPanel.add(annField, new CellConstraints("4, 6, 1, 1, default, default"));
             annField.setName("annField");
@@ -229,7 +224,8 @@ public class TransactionDialog extends JDialog {
                 bobField.setText(String.valueOf(tran.getBobPaid()));
             }
 
-            formPanel.add(createPersonLabel(User.BOB.getName() + " Paid:"), new CellConstraints("2, 8, 1, 1, default, default"));
+            formPanel.add(createPersonLabel(User.BOB.getName() + " Paid:"),
+                new CellConstraints("2, 8, 1, 1, default, default"));
 
             // Add listeners to ensure that text can only be entered in one of the amount
             // fields when adding or updating a payment
@@ -271,7 +267,8 @@ public class TransactionDialog extends JDialog {
         }
 
         @Override
-        public void changedUpdate(DocumentEvent e) { }
+        public void changedUpdate(DocumentEvent e) {
+        }
 
         @Override
         public void insertUpdate(DocumentEvent e) {
@@ -279,6 +276,7 @@ public class TransactionDialog extends JDialog {
         }
 
         @Override
-        public void removeUpdate(DocumentEvent e) { }
+        public void removeUpdate(DocumentEvent e) {
+        }
     }
 }
