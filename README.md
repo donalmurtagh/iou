@@ -91,7 +91,7 @@ When the application starts, the selected user should use their MySQL password t
 If you wish to run the application on a machine that doesn't have Maven installed, you can build a self-contained JAR file
 by executing the following Maven command from the project's root directory:
 
-`mvn assembly:assembly`
+`mvn clean compile assembly:single`
 
 This will create a jar file in the `target` directory named `iou.jar`. This file can be run on any
 machine that has Java installed via the command `java -jar iou.jar`.
