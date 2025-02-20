@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -20,7 +20,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 
-public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements TransactionDao {
+public class JdbcTransactionDaoImpl extends JdbcDaoSupport implements TransactionDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JdbcTransactionDaoImpl.class);
 
@@ -157,7 +157,7 @@ public class JdbcTransactionDaoImpl extends SimpleJdbcDaoSupport implements Tran
      */
     @Override
     public List<Transaction> getTransactions(TransactionType type) {
-        return getSimpleJdbcTemplate().query("""
+        return getJdbcTemplate().query("""
                 select id, type, tran_date, description, ann_paid, bob_paid
                 from transaction
                 where archived = 0

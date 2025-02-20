@@ -7,7 +7,7 @@ import java.util.Date;
 
 public abstract class Transaction {
 
-    private TransactionType type;
+    private final TransactionType type;
     private String description;
     private Date date = new Date();
     private long id;
@@ -64,24 +64,20 @@ public abstract class Transaction {
 
     @Override
     public String toString() {
-
         return String.format("id=%s, description=%s, date=%s, ann paid=%s, bob paid=%s",
                 id, description, date, annPaid, bobPaid);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Transaction)) {
-            return false;
+        if (obj instanceof Transaction otherTransaction) {
+            return this.id == otherTransaction.id;
         }
-
-        return this.id == ((Transaction) obj).id;
+        return false;
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(id).toHashCode();
-
     }
-
 }
