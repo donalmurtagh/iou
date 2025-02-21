@@ -19,7 +19,6 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 
 /**
  * The login dialog box

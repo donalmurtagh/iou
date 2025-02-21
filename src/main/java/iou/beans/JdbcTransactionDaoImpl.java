@@ -4,8 +4,6 @@ import iou.enums.TransactionType;
 import iou.model.Expense;
 import iou.model.Payment;
 import iou.model.Transaction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.JdbcUpdateAffectedIncorrectNumberOfRowsException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;

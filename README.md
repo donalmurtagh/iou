@@ -40,7 +40,9 @@ affecting the current balance.
 If using macOS or Linux it is recommended to use either [Homebrew](https://brew.sh/) or [SDKMAN](https://sdkman.io/) 
 to install the following dependencies.
 
-* Java Development Kit (JDK), version 17 and above
+* Java, version 17 and above.
+  * [Running the application from source](#source) requires a full Java Development Kit (JDK)
+  * [Running the executable JAR](#binary) requires only a Java Runtime Environment (JRE)
 * MySQL, version 8 and above
 * Maven, version 3
 
@@ -80,18 +82,16 @@ mysql> grant all on iou.* to bob@localhost;
 
 ### Run IOU
 
-#### With Maven
-To build and run the application with Maven, execute the command below from the project's root directory:
-
-`mvn compile exec:java -Dexec.mainClass=iou.gui.AppLauncher`
-
+#### Binary
+Download `iou.jar` from [the releases](https://github.com/donalmurtagh/iou/releases) and launch it with
+```
+java -jar iou.jar
+```
 When the application starts, the selected user should use their MySQL password to login.
 
-#### Without Maven
-If you wish to run the application on a machine that doesn't have Maven installed, you can build a self-contained JAR file
-by executing the following Maven command from the project's root directory:
-
-`mvn clean compile assembly:single`
-
-This will create a jar file in the `target` directory named `iou.jar`. This file can be run on any
-machine that has Java installed via the command `java -jar iou.jar`.
+#### Source
+To build and run the application from source with Maven, execute the command below from the project's root directory:
+```
+mvn compile exec:java -Dexec.mainClass=iou.gui.AppLauncher
+```
+When the application starts, the selected user should use their MySQL password to login.
