@@ -30,7 +30,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
@@ -68,7 +67,6 @@ public class MainFrame extends JFrame {
     private float netBobBalance;
 
     public MainFrame(TransactionService transactionService) {
-        GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
         this.transactionService = transactionService;
         initUI();
 
@@ -82,9 +80,6 @@ public class MainFrame extends JFrame {
 
         } catch (Exception ex) {
             handleFatalException(ex);
-
-        } finally {
-            GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
         }
     }
 
@@ -484,25 +479,23 @@ public class MainFrame extends JFrame {
      * Archive the current transactions
      */
     private void doArchive() {
-        try {
-            int answer = JOptionPane.showConfirmDialog(this, """                    
-                    Are you sure you want to archive all payments and expenses?
-                    This will cause all currently displayed payments and expenses to be replaced by a single balancing payment.""",
-                "Confirm Archive", JOptionPane.YES_NO_OPTION);
+        int answer = JOptionPane.showConfirmDialog(this, """                    
+                Are you sure you want to archive all payments and expenses?
+                This will cause all currently displayed payments and expenses to be replaced by a single balancing payment.""",
+            "Confirm Archive", JOptionPane.YES_NO_OPTION);
 
-            if (answer == JOptionPane.YES_OPTION) {
-                GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
-                transactionService.archiveTransactions(this.netBobBalance);
+        if (answer == JOptionPane.YES_OPTION) {
+            GuiUtils.doWithWaitCursor(this, () -> {
+                try {
+                    transactionService.archiveTransactions(this.netBobBalance);
 
-                // Refresh the list of payments and expenses. At most, a single balancing
-                // payment should be returned
-                loadData();
-            }
-        } catch (RuntimeException ex) {
-            handleFatalException(ex);
-
-        } finally {
-            GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
+                    // Refresh the list of payments and expenses. At most, a single balancing
+                    // payment should be returned
+                    loadData();
+                } catch (RuntimeException ex) {
+                    handleFatalException(ex);
+                }
+            });
         }
     }
 

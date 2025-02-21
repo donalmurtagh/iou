@@ -50,42 +50,37 @@ public class LoginFrame extends javax.swing.JFrame {
     }
 
     private void doLogin() {
+        GuiUtils.doWithWaitCursor(this, () -> {
+            try (var applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml")) {
+                User currentUser = annButton.isSelected() ? User.ANN : User.BOB;
+                String username = currentUser.getUsername();
+                String password = new String(passwordField.getPassword());
 
-        // Change the cursor to an hourglass
-        GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
+                TransactionService transactionService = applicationContext.getBean(TransactionService.class);
+                BasicDataSource dataSource = applicationContext.getBean(BasicDataSource.class);
+                dataSource.setUsername(username);
+                dataSource.setPassword(password);
 
-        try (var applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml")) {
-            User currentUser = annButton.isSelected() ? User.ANN : User.BOB;
-            String username = currentUser.getUsername();
-            String password = new String(passwordField.getPassword());
+                LOGGER.debug("Attempting to login with username: {}", username);
 
-            TransactionService transactionService = applicationContext.getBean(TransactionService.class);
-            BasicDataSource dataSource = applicationContext.getBean(BasicDataSource.class);
-            dataSource.setUsername(username);
-            dataSource.setPassword(password);
+                try {
+                    transactionService.login();
 
-            LOGGER.debug("Attempting to login with username: {}", username);
+                    // Close this window and open the main window instead
+                    dispose();
+                    new MainFrame(transactionService);
 
-            try {
-                transactionService.login();
-
-                // Close this window and open the main window instead
-                dispose();
-                new MainFrame(transactionService);
-
-            } catch (Exception ex) {
-                LOGGER.error("Login failed for user: {}", username, ex);
-                JOptionPane.showMessageDialog(this, """
-                        Login failed. Likely causes:
-                        - Password typed incorrectly
-                        - MySQL is not running
-                        - Database is not initialized""",
-                    "Login Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    LOGGER.error("Login failed for user: {}", username, ex);
+                    JOptionPane.showMessageDialog(this, """
+                            Login failed. Likely causes:
+                            - Password typed incorrectly
+                            - MySQL is not running
+                            - Database is not initialized""",
+                        "Login Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
-        } finally {
-            // Change the cursor back
-            GuiUtils.changeCursor(this, Cursor.DEFAULT_CURSOR);
-        }
+        });
     }
 
     private void initGUI() {

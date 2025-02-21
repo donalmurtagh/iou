@@ -60,7 +60,6 @@ public final class GuiUtils {
         }
     }
 
-
     public static void showCentered(Window frame) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
@@ -69,9 +68,12 @@ public final class GuiUtils {
         frame.setVisible(true);
     }
 
-    public static void changeCursor(Window window, int cursorType) {
-
-        Cursor hourglassCursor = new Cursor(cursorType);
-        window.setCursor(hourglassCursor);
+    public static void doWithWaitCursor(Window frame, Runnable task) {
+        frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        try {
+            task.run();
+        } finally {
+            frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
     }
 }
