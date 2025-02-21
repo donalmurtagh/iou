@@ -20,7 +20,7 @@
     </bean>
 
     <aop:config>
-        <aop:advisor pointcut="execution(* iou.beans.TrasactionService.*(..))" advice-ref="txAdvice"/>
+        <aop:advisor pointcut="execution(* iou.beans.TransactionService.*(..))" advice-ref="txAdvice"/>
     </aop:config>
 
     <tx:advice id="txAdvice" transaction-manager="txManager">
