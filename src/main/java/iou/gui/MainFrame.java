@@ -1,6 +1,6 @@
 package iou.gui;
 
-import iou.beans.TrasactionService;
+import iou.beans.TransactionService;
 import iou.enums.ExpenseField;
 import iou.enums.PaymentField;
 import iou.enums.TranDialogMode;
@@ -56,7 +56,7 @@ public class MainFrame extends JFrame {
     private final JTable paymentsTable = new TransactionTable();
     private final JButton editExpButton = new JButton();
     private final JButton addPmtButton = new JButton();
-    private final TrasactionService trasactionService;
+    private final TransactionService transactionService;
     private JButton archiveButton;
     private TransactionTableModel expensesTableModel;
     private TransactionTableModel paymentsTableModel;
@@ -67,9 +67,9 @@ public class MainFrame extends JFrame {
      */
     private float netBobBalance;
 
-    public MainFrame(TrasactionService trasactionService) {
+    public MainFrame(TransactionService transactionService) {
         GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
-        this.trasactionService = trasactionService;
+        this.transactionService = transactionService;
         initUI();
 
         try {
@@ -106,13 +106,13 @@ public class MainFrame extends JFrame {
     private void loadData() {
         try {
             // Get all the expenses
-            List<Transaction> expenses = trasactionService.getTransactions(TransactionType.EXPENSE);
+            List<Transaction> expenses = transactionService.getTransactions(TransactionType.EXPENSE);
             LOGGER.debug("Retrieved initial list of {} expenses", expenses.size());
             expensesTableModel = new ExpenseTableModel(expenses);
             expensesTable.setModel(expensesTableModel);
 
             // Get all the payments
-            List<Transaction> payments = trasactionService.getTransactions(TransactionType.PAYMENT);
+            List<Transaction> payments = transactionService.getTransactions(TransactionType.PAYMENT);
             LOGGER.debug("Retrieved initial list of {} payments", payments.size());
             paymentsTableModel = new PaymentTableModel(payments);
             paymentsTable.setModel(paymentsTableModel);
@@ -279,7 +279,7 @@ public class MainFrame extends JFrame {
         LOGGER.debug("Deleting transaction: {}", tran);
 
         try {
-            trasactionService.deleteTransaction(tran.getId());
+            transactionService.deleteTransaction(tran.getId());
 
             if (tran.getTransactionType() == TransactionType.EXPENSE) {
                 expensesTableModel.deleteTransaction(tran);
@@ -316,7 +316,7 @@ public class MainFrame extends JFrame {
         LOGGER.debug("Updated transaction passed validation: {}", tran);
 
         try {
-            trasactionService.updateTransaction(tran);
+            transactionService.updateTransaction(tran);
 
             if (tran.getTransactionType() == TransactionType.EXPENSE) {
                 expensesTableModel.replaceTransaction(tableRowIndex, tran);
@@ -337,7 +337,7 @@ public class MainFrame extends JFrame {
         LOGGER.debug("New transaction passed validation: {}", tran);
 
         try {
-            Transaction persistedTran = trasactionService.insertTransaction(tran);
+            Transaction persistedTran = transactionService.insertTransaction(tran);
 
             if (tran.getTransactionType() == TransactionType.EXPENSE) {
                 expensesTableModel.addTransaction(persistedTran);
@@ -492,7 +492,7 @@ public class MainFrame extends JFrame {
 
             if (answer == JOptionPane.YES_OPTION) {
                 GuiUtils.changeCursor(this, Cursor.WAIT_CURSOR);
-                trasactionService.archiveTransactions(this.netBobBalance);
+                transactionService.archiveTransactions(this.netBobBalance);
 
                 // Refresh the list of payments and expenses. At most, a single balancing
                 // payment should be returned

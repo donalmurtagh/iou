@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class TransactionServiceImpl implements TrasactionService {
+public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionDao transactionDao;
 
@@ -18,7 +18,7 @@ public class TransactionServiceImpl implements TrasactionService {
     }
 
     @Override
-    public void login(String username, String password) {
+    public void login() {
         transactionDao.testConnection();
     }
 

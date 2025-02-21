@@ -5,9 +5,9 @@ import iou.model.Transaction;
 
 import java.util.List;
 
-public interface TrasactionService {
+public interface TransactionService {
 
-    void login(String username, String password);
+    void login();
 
     List<Transaction> getTransactions(TransactionType type);
 
