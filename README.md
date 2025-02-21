@@ -41,8 +41,8 @@ If using macOS or Linux it is recommended to use either [Homebrew](https://brew.
 to install the following dependencies.
 
 * Java, version 17 and above.
-  * [Running the application from source](#source) requires a full Java Development Kit (JDK)
-  * [Running the executable JAR](#binary) requires only a Java Runtime Environment (JRE)
+  * [Running the application from source](#build-and-run-from-source) requires a full Java Development Kit (JDK)
+  * [Running the executable JAR](#download-executable) requires only a Java Runtime Environment (JRE)
 * MySQL, version 8 and above
 * Maven, version 3
 
@@ -83,7 +83,7 @@ mysql> grant all on iou.* to bob@localhost;
 ### Run IOU
 Run the application either by downloading and launching the executable JAR or build and run from source.
 
-#### Download and run JAR
+#### Download executable
 Download `iou.jar` from [the releases](https://github.com/donalmurtagh/iou/releases) and launch it with
 ```
 java -jar iou.jar
