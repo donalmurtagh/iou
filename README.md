@@ -81,15 +81,16 @@ mysql> grant all on iou.* to bob@localhost;
 ```
 
 ### Run IOU
+Run the application either by downloading and launching the executable JAR or build and run from source.
 
-#### Binary
+#### Download and run JAR
 Download `iou.jar` from [the releases](https://github.com/donalmurtagh/iou/releases) and launch it with
 ```
 java -jar iou.jar
 ```
 When the application starts, the selected user should use their MySQL password to login.
 
-#### Source
+#### Build and run from source
 To build and run the application from source with Maven, execute the command below from the project's root directory:
 ```
 mvn compile exec:java -Dexec.mainClass=iou.gui.AppLauncher
