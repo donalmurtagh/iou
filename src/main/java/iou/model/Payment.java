@@ -27,7 +27,7 @@ public class Payment extends Transaction {
     @Override
     public void setAnnPaid(float amount) {
 
-        // If Abb paid Bob, then Bob cannot also have paid Ann
+        // If Ann paid Bob, then Bob cannot also have paid Ann
         if (amount != 0) {
             super.setAnnPaid(amount);
             super.setBobPaid(0);
