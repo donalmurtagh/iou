@@ -75,8 +75,8 @@ mysql> create database iou;
 mysql> use iou;
 mysql> source src/main/resources/schema.sql
 mysql> create user ann@localhost identified by 'secret';
-mysql> grant all on iou.* to ann@localhost;
 mysql> create user bob@localhost identified by 'secret';
+mysql> grant all on iou.* to ann@localhost;
 mysql> grant all on iou.* to bob@localhost;
 ```
 
