@@ -5,6 +5,17 @@ keeps a record of all transactions and calculates the current balance (shown in 
 
 ![Expense](docs/screenshot.png)
 
+## Should I use it?
+**Probably not**. This project is not actively maintained, and there are web-based solutions to this problem that are far superior, e.g. [Spliit](https://spliit.app) or [Splitwise](https://www.splitwise.com).
+
+If you have the technical skills to get IOU up-and-running, and don't mind these drawbacks:
+
+- It can only be accessed via the same desktop/laptop it's installed on
+- The only client (user interface) is an ugly desktop application
+- It can only track money owed between two people
+
+then go right ahead, but I wouldn't particularly recommend it.
+
 ## How does it work?
 IOU supports two types of transactions: payments and expenses.
 
