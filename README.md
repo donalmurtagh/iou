@@ -11,10 +11,10 @@ keeps a record of all transactions and calculates the current balance (shown in 
 If you have the technical skills to get IOU up-and-running, and don't mind these drawbacks:
 
 - It can only be accessed via the same desktop/laptop it's installed on
-- The only client (user interface) is an ugly desktop application
+- The only client (user interface) is a desktop application
 - It can only track money owed between two people
 
-then go right ahead, but I wouldn't particularly recommend it.
+then go right ahead, but don't say I didn't warn you 😉
 
 ## How does it work?
 IOU supports two types of transactions: payments and expenses.
